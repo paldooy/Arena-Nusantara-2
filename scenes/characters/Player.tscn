@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://player"]
+
+[ext_resource type="Script" uid="uid://ds1f07doex1q6" path="res://scripts/player.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ct75urkvysetb" path="res://assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_gin2a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7n8ao"]
+atlas = ExtResource("2_gin2a")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7wym0"]
+atlas = ExtResource("2_gin2a")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gj1sn"]
+atlas = ExtResource("2_gin2a")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rpfb3"]
+atlas = ExtResource("2_gin2a")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_miirx"]
+atlas = ExtResource("2_gin2a")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m6phi"]
+atlas = ExtResource("2_gin2a")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_oihyf"]
+animations = [{
+"frames": [{
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_7n8ao")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7wym0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gj1sn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rpfb3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_miirx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m6phi")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Player" type="CharacterBody2D" unique_id=1978409780]
+script = ExtResource("1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1283734913]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=435140557]
+sprite_frames = SubResource("SpriteFrames_oihyf")
+frame_progress = 0.5799843
