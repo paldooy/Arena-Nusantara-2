@@ -11,11 +11,11 @@ signal on_heal_applied(target: Node, heal_amount: int)
 # ─── KALKULASI DAMAGE ─────────────────────────────────────
 
 func calc_damage(
-		base_damage:   int,
-		crit_chance:   float,
-		crit_mult:     float,
-		target_defense: int = 0,
-		damage_mult:   float = 1.0   # dari skill
+		base_damage:    int,
+		crit_chance:    float,
+		crit_mult:      float,
+		target_defense: int   = 0,
+		damage_mult:    float = 1.0   # dari skill
 ) -> Dictionary:
 
 	var raw: float = base_damage * damage_mult
@@ -35,19 +35,19 @@ func calc_damage(
 # target harus punya method take_damage(amount: int)
 func apply_damage(
 		attacker_stats: Dictionary,
-		target: Node,
-		skill_data: Dictionary = {},
+		target:         Node,
+		skill_data:     Dictionary = {},
 		target_defense: int = 0
 ) -> int:
 
-	var base:       int   = int(attacker_stats.get("damage", 10))
-	var crit_c:     float = attacker_stats.get("crit_chance", 0.0)
-	var crit_m:     float = attacker_stats.get("crit_mult",   1.5)
-	var dmg_mult:   float = skill_data.get("damage_mult", 1.0)
+	var base:     int   = int(attacker_stats.get("damage", 10))
+	var crit_c:   float = attacker_stats.get("crit_chance", 0.0)
+	var crit_m:   float = attacker_stats.get("crit_mult",   1.5)
+	var dmg_mult: float = skill_data.get("damage_mult", 1.0)
 
-	var result: Dictionary = calc_damage(base, crit_c, crit_m, target_defense, dmg_mult)
-	var final_dmg: int     = result["damage"]
-	var is_crit: bool      = result["is_crit"]
+	var result:    Dictionary = calc_damage(base, crit_c, crit_m, target_defense, dmg_mult)
+	var final_dmg: int        = result["damage"]
+	var is_crit:   bool       = result["is_crit"]
 
 	if target.has_method("take_damage"):
 		target.take_damage(final_dmg)
@@ -85,7 +85,7 @@ func apply_aoe_damage(
 		var enemy_pos: Vector2 = enemy.global_position
 		if center_pos.distance_to(enemy_pos) <= radius:
 			var defense: int = enemy.get("defense") if enemy.get("defense") != null else 0
-			var dmg: int     = apply_damage(attacker_stats, enemy, skill_data, defense)
+			apply_damage(attacker_stats, enemy, skill_data, defense)
 			hit_count += 1
 
 	print("[DamageSystem] AOE hit ", hit_count, " enemies")

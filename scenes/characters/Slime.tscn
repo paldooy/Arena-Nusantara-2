@@ -1,18 +1,73 @@
-[gd_scene load_steps=2 format=3 uid="uid://slime"]
+[gd_scene format=3 uid="uid://slime"]
 
-[ext_resource type="Script" path="res://scripts/enemy_base.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/characters/EnemyBase.tscn" id="1"]
+[ext_resource type="Texture2D" uid="uid://d2i5ohs2e0iys" path="res://assets/TinySword/Factions/Goblins/Troops/Torch/Red/Torch_Red.png" id="2_qb22b"]
 
-[node name="Slime" type="CharacterBody2D"]
-script = ExtResource("1")
+[sub_resource type="CircleShape2D" id="CircleShape2D_qb22b"]
+radius = 25.019993
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ac2ri"]
+atlas = ExtResource("2_qb22b")
+region = Rect2(0, 192, 192, 192)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ug2gy"]
+atlas = ExtResource("2_qb22b")
+region = Rect2(192, 192, 192, 192)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-modulate = Color(0.3, 1.0, 0.4, 1.0)
+[sub_resource type="AtlasTexture" id="AtlasTexture_i8ngh"]
+atlas = ExtResource("2_qb22b")
+region = Rect2(384, 192, 192, 192)
 
-[node name="HpBar" type="ProgressBar" parent="."]
-position = Vector2(-20, -28)
-custom_minimum_size = Vector2(40, 6)
-show_percentage = false
-value = 100.0
+[sub_resource type="AtlasTexture" id="AtlasTexture_mi4qg"]
+atlas = ExtResource("2_qb22b")
+region = Rect2(576, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oqjq5"]
+atlas = ExtResource("2_qb22b")
+region = Rect2(768, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pl06t"]
+atlas = ExtResource("2_qb22b")
+region = Rect2(960, 192, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_88ehi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ac2ri")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ug2gy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i8ngh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mi4qg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oqjq5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pl06t")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
+[node name="Slime" unique_id=1518871070 instance=ExtResource("1")]
+
+[node name="CollisionShape2D" parent="." index="0"]
+shape = SubResource("CircleShape2D_qb22b")
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+position = Vector2(0, -32)
+sprite_frames = SubResource("SpriteFrames_88ehi")
+animation = &"run"
+
+[node name="HpBar" parent="." index="2"]
+offset_left = -20.0
+offset_top = -28.0
+offset_right = -20.0
+offset_bottom = -28.0

@@ -18,28 +18,41 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -110.0
-offset_right = 260.0
-offset_bottom = 110.0
+offset_left = -350.0
+offset_top = -140.0
+offset_right = 350.0
+offset_bottom = 140.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
-theme_override_constants/separation = 16
+theme_override_constants/separation = 14
 
 [node name="LblTitle" type="Label" parent="PanelContainer/VBoxContainer"]
 text = "Pilih Skill Baru!"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 20
 
+[node name="LblSlot" type="Label" parent="PanelContainer/VBoxContainer"]
+text = "Skill Slot 1 dari 2"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 13
+
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
-theme_override_constants/separation = 20
+theme_override_constants/separation = 14
 
-[node name="BtnSkillA" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnA" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
 text = "Skill A"
-custom_minimum_size = Vector2(220, 80)
+custom_minimum_size = Vector2(200, 90)
 autowrap_mode = 3
+size_flags_horizontal = 3
 
-[node name="BtnSkillB" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnB" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
 text = "Skill B"
-custom_minimum_size = Vector2(220, 80)
+custom_minimum_size = Vector2(200, 90)
 autowrap_mode = 3
+size_flags_horizontal = 3
+
+[node name="BtnC" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+text = "Skill C"
+custom_minimum_size = Vector2(200, 90)
+autowrap_mode = 3
+size_flags_horizontal = 3

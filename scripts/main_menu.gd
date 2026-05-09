@@ -2,9 +2,10 @@ extends Control
 
 # ============================================================
 # main_menu.gd
+# Layar awal: pilih kelas, mulai game
 # ============================================================
 
-@onready var btn_berserker:   Button = $VBoxContainer/BtnBerserker
+@onready var btn_berserker:  Button = $VBoxContainer/BtnBerserker
 @onready var btn_necromancer: Button = $VBoxContainer/BtnNecromancer
 
 func _ready() -> void:

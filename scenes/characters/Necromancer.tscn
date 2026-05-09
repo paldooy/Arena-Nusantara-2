@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://necromancer"]
+
+[ext_resource type="Script" path="res://scripts/player_necromancer.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/attack_area.gd" id="2"]
+
+[node name="Necromancer" type="CharacterBody2D"]
+script = ExtResource("1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+[node name="AttackArea" type="Node2D" parent="."]
+script = ExtResource("2")
+
+[node name="Polygon2D" type="Polygon2D" parent="AttackArea"]
+color = Color(0.6, 0.1, 1.0, 0.28)
+visible = false
+
+[node name="CirclePolygon" type="Polygon2D" parent="AttackArea"]
+color = Color(0.4, 0.0, 0.8, 0.30)
+visible = false

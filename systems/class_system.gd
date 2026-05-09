@@ -1,8 +1,8 @@
 extends Node
 
 # ============================================================
-# class_system.gd
-# Koordinator utama: menghubungkan level, stat, dan skill
+# class_system.gd  [DIREVISI]
+# Koordinator utama — hubungkan level, stat, skill, upgrade
 # ============================================================
 
 signal on_player_ready(char_class_name: String)
@@ -10,9 +10,10 @@ signal on_stats_updated(stats: Dictionary)
 
 enum CharacterClass { BERSERKER, NECROMANCER }
 
-@onready var level_system  = $"../LevelSystem"
-@onready var stat_system   = $"../StatSystem"
-@onready var skill_system  = $"../SkillSystem"
+@onready var level_system         = $"../LevelSystem"
+@onready var stat_system          = $"../StatSystem"
+@onready var skill_system         = $"../SkillSystem"
+@onready var stat_upgrade_system  = $"../StatUpgradeSystem"
 
 var selected_class: CharacterClass
 var current_hp: int = 0
@@ -23,14 +24,16 @@ func init_class(cls: CharacterClass) -> void:
 
 	stat_system.init(cls)
 	skill_system.init(cls)
-	level_system.level = 1
+	stat_upgrade_system.init(cls, stat_system)  # ← inject stat_system
+
+	level_system.level       = 1
 	level_system.current_exp = 0
 	level_system.exp_to_next = level_system.EXP_TABLE[0]
 
 	max_hp     = stat_system.get_max_hp()
 	current_hp = max_hp
 
-	# Sambungkan sinyal level_system ke class_system
+	# Sambungkan sinyal
 	if not level_system.on_level_up.is_connected(_on_level_up):
 		level_system.on_level_up.connect(_on_level_up)
 	if not level_system.on_skill_unlock.is_connected(_on_skill_unlock):
@@ -41,18 +44,25 @@ func init_class(cls: CharacterClass) -> void:
 	print("[ClassSystem] Class dipilih: ", CharacterClass.keys()[cls])
 
 func _on_level_up(new_level: int) -> void:
+	# 1. Stat base naik otomatis
 	stat_system.apply_level_up(new_level)
-	# Update max HP dan heal sebagian saat level up (reward kecil)
-	var old_max = max_hp
-	max_hp = stat_system.get_max_hp()
-	current_hp += (max_hp - old_max)          # tambah HP sebesar kenaikan max HP
-	current_hp = min(current_hp, max_hp)       # jangan melebihi max
+
+	# 2. Update HP (tambah sejumlah kenaikan max HP)
+	var old_max: int = max_hp
+	max_hp    = stat_system.get_max_hp()
+	current_hp += (max_hp - old_max)
+	current_hp = min(current_hp, max_hp)
+
+	# 3. Generate pilihan upgrade stat manual (tiap level up)
+	stat_upgrade_system.generate_choices()
+
 	emit_signal("on_stats_updated", stat_system.stats)
 
 func _on_skill_unlock(level: int) -> void:
+	# Level 5 & 10: pilih skill
 	skill_system.on_level_reached(level)
 
-# ─── COMBAT ───────────────────────────────────────────────
+# ─── COMBAT ──────────────────────────────────────────────────
 func take_damage(raw_damage: int) -> int:
 	var defense: int = int(stat_system.get_stat("defense"))
 	var final_dmg: int = max(1, raw_damage - defense)

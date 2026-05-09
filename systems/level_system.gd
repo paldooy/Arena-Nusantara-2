@@ -17,8 +17,6 @@ var level: int = 1
 var current_exp: int = 0
 var exp_to_next: int = 0
 
-# EXP yang dibutuhkan per level (dikalibrasi untuk 15-20 menit)
-# Total EXP untuk mencapai level 15 sekitar 3000-4000
 const EXP_TABLE: Array[int] = [
 	0,    # level 1  (tidak dipakai)
 	120,  # level 1 → 2
@@ -44,11 +42,9 @@ func _ready() -> void:
 
 func add_exp(amount: int) -> void:
 	if level >= MAX_LEVEL:
-		return  # Tidak bisa level up lagi setelah max level
-
+		return
 	current_exp += amount
 	emit_signal("on_exp_gained", current_exp, exp_to_next)
-
 	while current_exp >= exp_to_next and level < MAX_LEVEL:
 		current_exp -= exp_to_next
 		_level_up()
@@ -57,18 +53,14 @@ func _level_up() -> void:
 	level += 1
 	print("[LevelSystem] Level Up! Sekarang level: ", level)
 	emit_signal("on_level_up", level)
-
-	# Cek apakah ini level unlock skill
 	if level in SKILL_UNLOCK_LEVELS:
 		emit_signal("on_skill_unlock", level)
-
-	# Update EXP kebutuhan berikutnya
 	if level < MAX_LEVEL:
 		exp_to_next = EXP_TABLE[level - 1]
 	else:
 		exp_to_next = 0
 		current_exp = 0
-		print("[LevelSystem] Level MAX tercapai! Boss akan muncul!")
+		print("[LevelSystem] Level MAX! Boss akan muncul!")
 		emit_signal("on_boss_trigger")
 
 func get_level() -> int:
