@@ -2,17 +2,17 @@
 
 [ext_resource type="Script" path="res://scripts/stat_upgrade_ui.gd" id="1"]
 
-[node name="StatUpgradeUI" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-process_mode = 3
+[node name="StatUpgradeUI" type="CanvasLayer"]
+layer = 10
 script = ExtResource("1")
 
 [node name="BgOverlay" type="ColorRect" parent="."]
 process_mode = 3
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0, 0, 0, 0.6)
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0, 0, 0, 0.65)
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 process_mode = 3

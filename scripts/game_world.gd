@@ -25,8 +25,8 @@ const BASE_SUMMON_HP:     int = 60
 @onready var enemy_spawner:     Node2D      = $EnemySpawner
 @onready var camera:            Camera2D    = $Camera2D
 @onready var hud:               CanvasLayer = $HUD
-@onready var stat_upgrade_ui:   Control     = $StatUpgradeUI
-@onready var skill_choice_ui:   Control     = $SkillChoiceUI
+@onready var stat_upgrade_ui:   CanvasLayer = $StatUpgradeUI
+@onready var skill_choice_ui:   CanvasLayer = $SkillChoiceUI
 
 @onready var level_system:        Node = $Systems/LevelSystem
 @onready var stat_system:         Node = $Systems/StatSystem

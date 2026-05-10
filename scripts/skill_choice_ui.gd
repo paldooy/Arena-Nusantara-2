@@ -1,25 +1,27 @@
-extends Control
+extends CanvasLayer
 
 # ============================================================
-# skill_choice_ui.gd  [FIX — sama dengan stat_upgrade_ui]
-# Level 5  → 3 tombol (semua skill class)
-# Level 10 → 2 tombol (2 skill yang belum dipilih)
+# skill_choice_ui.gd  [FIX FINAL]
+# Root CanvasLayer — sama seperti stat_upgrade_ui.gd
+# Level 5  → 3 tombol
+# Level 10 → 2 tombol (btn_c disembunyikan)
 # ============================================================
 
 signal skill_chosen(skill_id: String)
 
-@onready var lbl_title: Label  = $PanelContainer/VBoxContainer/LblTitle
-@onready var lbl_slot:  Label  = $PanelContainer/VBoxContainer/LblSlot
-@onready var btn_a:     Button = $PanelContainer/VBoxContainer/HBoxContainer/BtnA
-@onready var btn_b:     Button = $PanelContainer/VBoxContainer/HBoxContainer/BtnB
-@onready var btn_c:     Button = $PanelContainer/VBoxContainer/HBoxContainer/BtnC
+@onready var bg_overlay: ColorRect      = $BgOverlay
+@onready var panel:      PanelContainer = $PanelContainer
+@onready var lbl_title:  Label          = $PanelContainer/VBoxContainer/LblTitle
+@onready var lbl_slot:   Label          = $PanelContainer/VBoxContainer/LblSlot
+@onready var btn_a:      Button         = $PanelContainer/VBoxContainer/HBoxContainer/BtnA
+@onready var btn_b:      Button         = $PanelContainer/VBoxContainer/HBoxContainer/BtnB
+@onready var btn_c:      Button         = $PanelContainer/VBoxContainer/HBoxContainer/BtnC
 
 var skill_system: Node  = null
 var choices:      Array = []
 
 func _ready() -> void:
-	visible = false
-	# Force semua child ke ALWAYS agar tombol aktif saat paused
+	_set_ui_visible(false)
 	_set_process_mode_recursive(self, Node.PROCESS_MODE_ALWAYS)
 	btn_a.pressed.connect(func(): _confirm(0))
 	btn_b.pressed.connect(func(): _confirm(1))
@@ -29,6 +31,10 @@ func _set_process_mode_recursive(node: Node, mode: int) -> void:
 	node.process_mode = mode
 	for child in node.get_children():
 		_set_process_mode_recursive(child, mode)
+
+func _set_ui_visible(show_ui: bool) -> void:
+	bg_overlay.visible = show_ui
+	panel.visible      = show_ui
 
 func show_choices(choice_ids: Array, skill_sys: Node) -> void:
 	skill_system = skill_sys
@@ -51,7 +57,7 @@ func show_choices(choice_ids: Array, skill_sys: Node) -> void:
 		else:
 			btns[i].visible = false
 
-	visible = true
+	_set_ui_visible(true)
 	call_deferred("_do_pause")
 
 func _do_pause() -> void:
@@ -62,5 +68,5 @@ func _confirm(index: int) -> void:
 	if skill_system:
 		skill_system.player_chose_skill(choices[index])
 	emit_signal("skill_chosen", choices[index])
-	visible = false
+	_set_ui_visible(false)
 	get_tree().paused = false
