@@ -31,8 +31,9 @@ func _physics_process(delta: float) -> void:
 		anim_sprite.flip_h = velocity.x < 0
 	else:
 		velocity = Vector2.ZERO
-		anim_sprite.play("idle")
 		attack_cooldown -= delta
 		if attack_cooldown <= 0.0:
 			_do_attack()
 			attack_cooldown = _attack_interval_override
+		elif anim_sprite.animation != "attack":
+			anim_sprite.play("idle")
