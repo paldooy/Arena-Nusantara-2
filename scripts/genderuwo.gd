@@ -2,28 +2,22 @@ extends "res://scripts/enemy_base.gd"
 
 # ============================================================
 # genderuwo.gd — Tier 3 (Late Game)
-#
-# Musuh melee kuat dengan HP besar.
-# Tidak ada skill spesial, tapi:
-#   - HP jauh lebih besar dari Pocong
-#   - Damage per serangan lebih sakit
-#   - Bergerak sedikit lebih lambat dari Pocong
-#   - ATTACK_INTERVAL lebih panjang (sekali pukul = sakit)
-#   - Defense flat (kurangi damage masuk)
+# Melee kuat, HP besar, lebih lambat, defense flat 5
+# Attack interval 1.8s (lebih lambat dari base 1.4s)
 # ============================================================
 
-# Override interval serangan — Genderuwo lebih lambat tapi sakit
-# Kita gunakan var agar bisa diubah runtime
-var _attack_interval_override: float = 1.8   # lebih lambat dari base 1.4
+var _attack_interval_override: float = 1.8
 
 func _ready() -> void:
 	super._ready()
-	defense = 5   # damage reduction flat
+	defense = 5
 	if hp_bar:
-		hp_bar.modulate = Color(0.35, 0.15, 0.05)   # coklat tua kehitaman
+		hp_bar.modulate = Color(0.35, 0.15, 0.05)
 
-# Override _do_attack timing dengan interval berbeda
 func _physics_process(delta: float) -> void:
+	# FIX: wajib cek is_dying karena kita override physics_process
+	if is_dying: return
+
 	_tick_stun(delta)
 	if is_stunned or player == null: return
 
@@ -41,9 +35,4 @@ func _physics_process(delta: float) -> void:
 		attack_cooldown -= delta
 		if attack_cooldown <= 0.0:
 			_do_attack()
-			attack_cooldown = _attack_interval_override   # pakai override
-
-func _do_attack() -> void:
-	anim_sprite.play("attack")
-	if player and player.has_method("take_damage"):
-		player.take_damage(damage)
+			attack_cooldown = _attack_interval_override

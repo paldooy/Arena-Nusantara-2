@@ -29,15 +29,15 @@ enum EnemyType {
 # Banaspati berhenti lebih jauh (ranged), Pocong/Genderuwo dekat
 const ENEMY_BASE: Dictionary = {
 	EnemyType.POCONG: {
-		"hp": 40, "damage": 7, "exp": 25,
+		"hp": 100, "damage": 15, "exp": 25,
 		"speed": 80.0, "attack_range": 40.0,
 		"is_ranged": false,
 	},
 	EnemyType.BANASPATI: {
-		"hp": 60, "damage": 10, "exp": 38,
+		"hp": 60, "damage": 20, "exp": 38,
 		"speed": 50.0, "attack_range": 170.0,   # berhenti jauh, tembak dari sana
 		"is_ranged": true,
-		"projectile_speed": 180.0,
+		"projectile_speed": 150.0,
 	},
 	EnemyType.GENDERUWO: {
 		"hp": 130, "damage": 18, "exp": 55,

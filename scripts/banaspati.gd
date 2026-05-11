@@ -38,7 +38,7 @@ func _fire_projectile(target_world_pos: Vector2) -> void:
 	var proj := _FireBall.new()
 	proj.global_position  = global_position
 	proj.target_pos       = target_world_pos
-	proj.travel_speed     = 180.0
+	proj.travel_speed     = 150.0
 	proj.damage           = damage
 	proj.zone_duration    = FIRE_ZONE_DURATION
 	proj.zone_radius      = FIRE_ZONE_RADIUS
@@ -52,8 +52,8 @@ func _fire_projectile(target_world_pos: Vector2) -> void:
 # ─── INNER CLASS: Bola Api ──────────────────────────────────
 class _FireBall extends Node2D:
 	var target_pos:    Vector2 = Vector2.ZERO
-	var travel_speed:  float   = 180.0
-	var damage:        int     = 8
+	var travel_speed:  float   = 150.0
+	var damage:        int     = 15
 	var zone_duration: float   = 3.0
 	var zone_radius:   float   = 40.0
 	var zone_dmg_tick: float   = 0.5
@@ -121,10 +121,10 @@ class _FireBall extends Node2D:
 
 # ─── INNER CLASS: Area Api (bertahan 3 detik) ────────────────
 class _FireZone extends Node2D:
-	var damage:     int   = 8
+	var damage:     int   = 15
 	var duration:   float = 3.0
 	var radius:     float = 40.0
-	var dmg_tick:   float = 0.5
+	var dmg_tick:   float = 0.8
 	var player_ref: Node  = null
 
 	var _elapsed:    float = 0.0

@@ -16,9 +16,9 @@ extends CharacterBody2D
 
 signal request_passive_summon()   # tidak dipakai Berserker tapi wajib ada agar game_world tidak error
 
-const SPEED:          float = 130.0
+const SPEED:          float = 100.0
 const ATTACK_RANGE:   float = 70.0   # radius setengah lingkaran
-const ATTACK_INTERVAL:float = 0.55   # detik antar basic attack
+const ATTACK_INTERVAL:float = 0.7   # detik antar basic attack
 
 # Injected oleh game_world.gd
 var class_system:  Node = null
