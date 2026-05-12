@@ -1,19 +1,31 @@
 extends CharacterBody2D
 
 # ============================================================
-# enemy_base.gd  [FIX — musuh berhenti saat mati]
+# enemy_base.gd  [FIX — collision layer]
 #
-# BUG SEBELUMNYA:
-#   _die() memanggil remove_from_group() lalu await animasi,
-#   tapi _physics_process() masih jalan selama await itu —
-#   musuh tetap bergerak dan menyerang meski HP = 0.
+# LAYER & MASK di Godot Physics:
+#   Layer 1 = Player
+#   Layer 2 = Enemy
+#   Layer 3 = Boss (bisa collide dengan semua)
 #
-# FIX:
-#   Tambahkan flag `is_dying`. Saat is_dying = true,
-#   _physics_process() langsung return di awal.
+# Enemy biasa (layer 2, mask 1):
+#   - Berada di layer 2
+#   - Hanya detect layer 1 (player) → sesama enemy tidak tabrakan
+#   - Player (layer 1, mask 1|2) tetap bisa collide dengan enemy
+#
+# Boss (layer 3, mask 1|2|3):
+#   - Collide dengan semua
+#
+# Layer diset via kode di _ready() karena .tscn tidak menyimpan
+# collision_layer/mask secara reliable lintas import.
 # ============================================================
 
 signal on_died(enemy_node: Node, enemy_type: int)
+
+# Konstanta layer — sesuaikan dengan Project Settings > Physics > 2D
+const LAYER_PLAYER: int = 1   # bit 0 → value 1
+const LAYER_ENEMY:  int = 2   # bit 1 → value 2
+const LAYER_BOSS:   int = 4   # bit 2 → value 4
 
 var enemy_type:      int   = 0
 var max_hp:          int   = 40
@@ -27,9 +39,11 @@ var is_ranged:       bool  = false
 
 var is_marked:       bool  = false
 var is_stunned:      bool  = false
-var is_dying:        bool  = false   # ← FIX: flag mati
+var is_dying:        bool  = false
+var _in_attack_anim: bool  = false
 var stun_timer:      float = 0.0
-var attack_cooldown: float = 0.0
+var attack_cooldown: float = 0.5   # initial delay 0.5s
+
 const ATTACK_INTERVAL: float = 1.4
 
 var player: Node = null
@@ -39,6 +53,13 @@ var player: Node = null
 
 func _ready() -> void:
 	add_to_group("enemies")
+
+	# ── SET COLLISION LAYER ──────────────────────────────────
+	# Enemy biasa: ada di layer ENEMY, hanya detect PLAYER
+	# Sehingga sesama enemy TIDAK saling tabrakan
+	collision_layer = LAYER_ENEMY
+	collision_mask  = LAYER_PLAYER   # hanya mendeteksi/bertabrakan dengan player
+
 	hp_bar.max_value = max_hp
 	hp_bar.value     = current_hp
 	await get_tree().process_frame
@@ -59,17 +80,16 @@ func setup(stats: Dictionary, type: int) -> void:
 		hp_bar.max_value = max_hp
 		hp_bar.value     = current_hp
 
-# ── AI LOOP ────────────────────────────────────────────────
 func _physics_process(delta: float) -> void:
-	# FIX: berhenti total saat sedang animasi mati
 	if is_dying: return
-
 	_tick_stun(delta)
 	if is_stunned or player == null: return
 
 	var dist: float = global_position.distance_to(player.global_position)
 
 	if dist > attack_range:
+		if attack_cooldown < 0.5:
+			attack_cooldown = 0.5
 		var dir: Vector2 = (player.global_position - global_position).normalized()
 		velocity = dir * move_speed
 		move_and_slide()
@@ -77,50 +97,44 @@ func _physics_process(delta: float) -> void:
 		anim_sprite.flip_h = velocity.x < 0
 	else:
 		velocity = Vector2.ZERO
+		if not _in_attack_anim:
+			anim_sprite.play("idle")
 		attack_cooldown -= delta
-		if attack_cooldown <= 0.0:
+		if attack_cooldown <= 0.0 and not _in_attack_anim:
 			_do_attack()
 			attack_cooldown = ATTACK_INTERVAL
-		elif anim_sprite.animation != "attack":
-			anim_sprite.play("idle")
 
 func _do_attack() -> void:
-	# Guard tambahan — jangan serang kalau sedang mati
-	if is_dying: return
+	if is_dying or _in_attack_anim: return
 	anim_sprite.play("attack")
 	if player and is_instance_valid(player) and player.has_method("take_damage"):
 		player.take_damage(damage)
 
-# ── TERIMA DAMAGE ──────────────────────────────────────────
 func take_damage(amount: int) -> void:
-	# Abaikan damage kalau sudah dalam proses mati
 	if is_dying: return
-
 	var final_dmg: int = max(1, amount - defense)
 	current_hp -= final_dmg
 	current_hp  = max(current_hp, 0)
 	if hp_bar:
 		hp_bar.value = current_hp
-	if anim_sprite.animation != "attack":
+	if anim_sprite.animation != "attack" and not _in_attack_anim:
 		anim_sprite.play("hit")
 	if current_hp <= 0:
 		_die()
 
 func _die() -> void:
-	if is_dying: return   # cegah dipanggil dua kali
-	is_dying = true       # ← hentikan _physics_process seketika
-
+	if is_dying: return
+	is_dying = true
 	velocity = Vector2.ZERO
 	remove_from_group("enemies")
 	hp_bar.visible = false
 	anim_sprite.play("dead")
 	emit_signal("on_died", self, enemy_type)
-
-	# Tunggu animasi selesai, baru hapus node
 	await anim_sprite.animation_finished
-	queue_free()
+	await get_tree().create_timer(0.5).timeout
+	if is_instance_valid(self):
+		queue_free()
 
-# ── MARK ───────────────────────────────────────────────────
 func apply_mark(duration: float) -> void:
 	is_marked = true
 	modulate  = Color(0.6, 0.2, 1.0)
@@ -129,7 +143,6 @@ func apply_mark(duration: float) -> void:
 		is_marked = false
 		modulate  = Color.WHITE
 
-# ── STUN ───────────────────────────────────────────────────
 func apply_stun(duration: float) -> void:
 	if is_dying: return
 	is_stunned = true

@@ -17,6 +17,9 @@ func _ready() -> void:
 	super._ready()
 	if hp_bar:
 		hp_bar.modulate = Color(1.0, 0.3, 0.0)
+	# Boss collide dengan semua: layer 1|2|4, mask 1|2|4
+	collision_layer = LAYER_PLAYER | LAYER_ENEMY | LAYER_BOSS
+	collision_mask  = LAYER_PLAYER | LAYER_ENEMY | LAYER_BOSS
 
 func _physics_process(delta: float) -> void:
 	# FIX: wajib cek is_dying

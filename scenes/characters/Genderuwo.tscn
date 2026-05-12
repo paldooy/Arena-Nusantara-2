@@ -1,16 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://genderuwo"]
+[gd_scene format=3 uid="uid://genderuwo"]
 
-[ext_resource type="Script" path="res://scripts/genderuwo.gd" id="1"]
+[ext_resource type="Script" uid="uid://bw64omn82a17y" path="res://scripts/genderuwo.gd" id="1"]
 
-[node name="Genderuwo" type="CharacterBody2D"]
+[node name="Genderuwo" type="CharacterBody2D" unique_id=284746303]
+collision_layer = 8
 script = ExtResource("1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1511475488]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=114817828]
 
-[node name="HpBar" type="ProgressBar" parent="."]
-position = Vector2(-24, -44)
+[node name="HpBar" type="ProgressBar" parent="." unique_id=1234650180]
 custom_minimum_size = Vector2(48, 6)
-show_percentage = false
+offset_left = -24.0
+offset_top = -44.0
+offset_right = -24.0
+offset_bottom = -44.0
 value = 100.0
+show_percentage = false

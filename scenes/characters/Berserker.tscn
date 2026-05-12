@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://berserker"]
 
-[ext_resource type="Script" uid="uid://bpviil35vl2r2" path="res://scripts/player_berserker.gd" id="1"]
+[ext_resource type="Script" uid="uid://b6n4e46baosc3" path="res://scripts/player_berserker.gd" id="1"]
 [ext_resource type="Script" uid="uid://cnra16d8c288i" path="res://scripts/attack_area.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://bb2jmrb5k0qt2" path="res://assets/Nusantara/Player/Ksatria/ATTACK.PNG" id="2_1qwft"]
 [ext_resource type="Texture2D" uid="uid://bf8xk3uunydfk" path="res://assets/Nusantara/Player/Ksatria/IDLE.PNG" id="3_1qwft"]
@@ -208,6 +208,8 @@ shape = SubResource("CircleShape2D_pdciw")
 position = Vector2(-8, -22)
 sprite_frames = SubResource("SpriteFrames_hvd10")
 animation = &"attack"
+frame = 4
+frame_progress = 1.0
 
 [node name="AttackArea" type="Node2D" parent="." unique_id=1216903765]
 script = ExtResource("2")

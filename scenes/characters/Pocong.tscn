@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://pocong"]
 
-[ext_resource type="Script" uid="uid://hsatsp5jux5b" path="res://scripts/pocong.gd" id="1"]
+[ext_resource type="Script" uid="uid://hmjdvlcoj26w" path="res://scripts/pocong.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://731du7sv24g0" path="res://assets/TinySword/Factions/Goblins/Troops/Torch/Blue/Torch_Blue.png" id="2_0gq21"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cwe88"]
@@ -33,6 +33,10 @@ region = Rect2(960, 384, 192, 192)
 [sub_resource type="AtlasTexture" id="AtlasTexture_pxjm8"]
 atlas = ExtResource("2_0gq21")
 region = Rect2(0, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tbr03"]
+atlas = ExtResource("2_0gq21")
+region = Rect2(0, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qdwmr"]
 atlas = ExtResource("2_0gq21")
@@ -115,6 +119,14 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tbr03")
+}],
+"loop": false,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 0.5,
 "texture": SubResource("AtlasTexture_qdwmr")
 }, {
@@ -174,7 +186,7 @@ shape = SubResource("CircleShape2D_cwe88")
 position = Vector2(0, -18.000002)
 scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_6a2b3")
-animation = &"attack"
+animation = &"dead"
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=73643391]
 custom_minimum_size = Vector2(40, 5)

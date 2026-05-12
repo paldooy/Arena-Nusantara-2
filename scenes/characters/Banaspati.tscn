@@ -1,16 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://banaspati"]
+[gd_scene format=3 uid="uid://banaspati"]
 
-[ext_resource type="Script" path="res://scripts/banaspati.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqyb06wuhftxp" path="res://scripts/banaspati.gd" id="1"]
 
-[node name="Banaspati" type="CharacterBody2D"]
+[node name="Banaspati" type="CharacterBody2D" unique_id=392980937]
+collision_layer = 4
 script = ExtResource("1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1843260013]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1710592462]
 
-[node name="HpBar" type="ProgressBar" parent="."]
-position = Vector2(-20, -30)
+[node name="HpBar" type="ProgressBar" parent="." unique_id=179794743]
 custom_minimum_size = Vector2(40, 5)
-show_percentage = false
+offset_left = -20.0
+offset_top = -30.0
+offset_right = -20.0
+offset_bottom = -30.0
 value = 100.0
+show_percentage = false
