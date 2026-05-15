@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://cnra16d8c288i" path="res://scripts/attack_area.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://bb2jmrb5k0qt2" path="res://assets/Nusantara/Player/Ksatria/ATTACK.PNG" id="2_1qwft"]
 [ext_resource type="Texture2D" uid="uid://bf8xk3uunydfk" path="res://assets/Nusantara/Player/Ksatria/IDLE.PNG" id="3_1qwft"]
+[ext_resource type="Texture2D" uid="uid://cu4h0nr3v4hsr" path="res://assets/Nusantara/Player/Ksatria/SKILL 2 (BUFF).png" id="3_8jb3m"]
+[ext_resource type="Texture2D" uid="uid://cc2laycw2jqy2" path="res://assets/Nusantara/Player/Ksatria/SKILL 3.png" id="4_2qyam"]
 [ext_resource type="Texture2D" uid="uid://cxym5dqf02usw" path="res://assets/Nusantara/Player/Ksatria/DAMAGED.png" id="4_icfoi"]
 [ext_resource type="Texture2D" uid="uid://b0pgdpu2vkh6u" path="res://assets/Nusantara/Player/Ksatria/RUN.PNG" id="5_8jb3m"]
 [ext_resource type="Texture2D" uid="uid://2py6sqxv6o7u" path="res://assets/Nusantara/Player/Ksatria/SKILL 1.PNG" id="5_icfoi"]
@@ -34,6 +36,26 @@ region = Rect2(256, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_icfoi"]
 atlas = ExtResource("3_1qwft")
 region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ysrfx"]
+atlas = ExtResource("4_2qyam")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1bcfl"]
+atlas = ExtResource("4_2qyam")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bku5n"]
+atlas = ExtResource("4_2qyam")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pcyr7"]
+atlas = ExtResource("4_2qyam")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rmml3"]
+atlas = ExtResource("4_2qyam")
+region = Rect2(256, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6vsy4"]
 atlas = ExtResource("4_icfoi")
@@ -130,6 +152,26 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_ysrfx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1bcfl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bku5n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pcyr7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rmml3")
+}],
+"loop": false,
+"name": &"ground_smash",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 0.5,
 "texture": SubResource("AtlasTexture_6vsy4")
 }, {
@@ -176,8 +218,8 @@ animations = [{
 "duration": 0.3,
 "texture": SubResource("AtlasTexture_hfxfr")
 }],
-"loop": true,
-"name": &"skill_1",
+"loop": false,
+"name": &"spin",
 "speed": 5.0
 }, {
 "frames": [{
@@ -198,6 +240,28 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_2brh4"]
+atlas = ExtResource("3_8jb3m")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_otpah"]
+atlas = ExtResource("3_8jb3m")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ysrfx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2brh4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otpah")
+}],
+"loop": true,
+"name": &"aura",
+"speed": 5.0
+}]
+
 [node name="Berserker" type="CharacterBody2D" unique_id=1304528930]
 script = ExtResource("1")
 
@@ -207,7 +271,7 @@ shape = SubResource("CircleShape2D_pdciw")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1150201785]
 position = Vector2(-8, -22)
 sprite_frames = SubResource("SpriteFrames_hvd10")
-animation = &"dead"
+animation = &"ground_smash"
 
 [node name="AttackArea" type="Node2D" parent="." unique_id=1216903765]
 script = ExtResource("2")
@@ -219,3 +283,10 @@ color = Color(1, 0.15, 0.15, 0.3)
 [node name="CirclePolygon" type="Polygon2D" parent="AttackArea" unique_id=128717317]
 visible = false
 color = Color(1, 0.2, 0.1, 0.22)
+
+[node name="Effects" type="Node2D" parent="." unique_id=441676209]
+
+[node name="Aura" type="AnimatedSprite2D" parent="Effects" unique_id=155606202]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_ysrfx")
+animation = &"aura"

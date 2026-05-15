@@ -21,17 +21,24 @@ var is_stunned:        bool  = false
 var stun_timer:        float = 0.0
 var attack_cooldown:   float = 0.0
 var is_attacking:      bool  = false
+var is_anim_locked:    bool  = false
+var locked_anim:       String = ""
 var blood_aura_active: bool  = false
 var blood_aura_timer:  float = 0.0
 
 @onready var anim:        AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Node2D           = $AttackArea
+@onready var aura_fx:     AnimatedSprite2D = $Effects/Aura
 
 func _ready() -> void:
 	add_to_group("player")
 	# Layer 1 = Player, mask 1|2|4 agar bisa collide dengan semua enemy
 	collision_layer = 1
 	collision_mask  = 1 | 2 | 4
+	anim.animation_finished.connect(_on_anim_finished)
+	if aura_fx:
+		aura_fx.visible = false
+		aura_fx.stop()
 
 func _process(delta: float) -> void:
 	if is_dead or not GameManager.is_playing(): return
@@ -102,7 +109,7 @@ func _execute_skill(skill_id: String) -> void:
 
 	match skill_id:
 		"berserker_spin":
-			anim.play(anim_name)
+			_is_lock_and_play(anim_name)
 			var radius: float = 80.0
 			attack_area.show_circle(radius, Color(1.0, 0.20, 0.10, 0.22), 0.5)
 			await get_tree().create_timer(0.15).timeout
@@ -115,21 +122,26 @@ func _execute_skill(skill_id: String) -> void:
 			if ls > 0.0 and total_dmg > 0:
 				damage_system.apply_lifesteal(self, total_dmg, ls)
 			await anim.animation_finished
+			_unlock_anim_if(anim_name)
 
 		"berserker_blood_aura":
-			anim.play(anim_name)
+			_is_lock_and_play(anim_name)
 			# Remove old buff if already active, then apply new one (prevents stacking)
 			if blood_aura_active:
 				class_system.stat_system.remove_blood_aura()
 			blood_aura_timer  = data.get("buff_duration", 6.0)
 			blood_aura_active = true
 			class_system.stat_system.apply_blood_aura(blood_aura_timer)
+			if aura_fx:
+				aura_fx.visible = true
+				aura_fx.play("blood_aura")
 			attack_area.show_circle(55.0, Color(1.0, 0.05, 0.05, 0.14),
 				data.get("buff_duration", 6.0))
 			await anim.animation_finished
+			_unlock_anim_if(anim_name)
 
 		"berserker_ground_smash":
-			anim.play(anim_name)
+			_is_lock_and_play(anim_name)
 			var smash_r: float = 100.0
 			attack_area.show_circle(smash_r, Color(1.0, 0.30, 0.0, 0.22), 0.5)
 			await get_tree().create_timer(0.25).timeout
@@ -147,6 +159,7 @@ func _execute_skill(skill_id: String) -> void:
 					if enemy.has_method("apply_stun"):
 						enemy.apply_stun(data.get("stun_duration", 1.5))
 			await anim.animation_finished
+			_unlock_anim_if(anim_name)
 
 
 # ─── TIMERS ────────────────────────────────────────────────
@@ -160,13 +173,16 @@ func _tick_timers(delta: float) -> void:
 		if blood_aura_timer <= 0.0:
 			blood_aura_active = false
 			class_system.stat_system.remove_blood_aura()
+			if aura_fx:
+				aura_fx.stop()
+				aura_fx.visible = false
 
 func take_damage(amount: int) -> void:
 	if is_dead or class_system == null: return
 	class_system.take_damage(amount)
 	if not is_attacking:
 		if anim.sprite_frames.get_animation_names().has("hit"):
-			anim.play("hit")
+			_is_lock_and_play("hit")
 	if not class_system.is_alive():
 		_die()
 
@@ -195,6 +211,21 @@ func _update_facing(dir: Vector2) -> void:
 	anim.flip_h = facing_right
 
 func _update_animation(dir: Vector2) -> void:
-	if is_attacking: return
+	if is_attacking or is_anim_locked: return
 	if dir.length() > 0.1: anim.play("walk")
 	else:                   anim.play("idle")
+
+func _is_lock_and_play(anim_name: String) -> void:
+	if not anim.sprite_frames.get_animation_names().has(anim_name):
+		return
+	is_anim_locked = true
+	locked_anim = anim_name
+	anim.play(anim_name)
+
+func _unlock_anim_if(anim_name: String) -> void:
+	if locked_anim == anim_name:
+		is_anim_locked = false
+		locked_anim = ""
+
+func _on_anim_finished() -> void:
+	_unlock_anim_if(anim.animation)

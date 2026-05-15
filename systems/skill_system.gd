@@ -47,16 +47,7 @@ const SKILL_DATA: Dictionary = {
 		"description": "Ledakan AOE lingkaran (radius 90) — DMG x1.6.",
 		"cooldown": 8.0, "damage_mult": 1.6, "radius": 90.0,
 	},
-	"necromancer_bone_shield": {
-		"id": "necromancer_bone_shield", "name": "Bone Shield",
-		"description": "Perisai tulang menyerap 20% max HP selama 10 detik.",
-		"cooldown": 25.0, "buff_duration": 10.0, "shield_pct": 0.20,
-	},
-	"necromancer_death_nova": {
-		"id": "necromancer_death_nova", "name": "Death Nova",
-		"description": "Ledakan besar (radius 150) — musuh yang mati jadi summon.",
-		"cooldown": 20.0, "damage_mult": 1.0, "radius": 150.0,
-	},
+	
 }
 
 const BERSERKER_FULL_POOL: Array = [
@@ -64,7 +55,6 @@ const BERSERKER_FULL_POOL: Array = [
 ]
 const NECROMANCER_FULL_POOL: Array = [
 	"necromancer_mark", "necromancer_summon_buff", "necromancer_dark_circle",
-	"necromancer_bone_shield", "necromancer_death_nova",
 ]
 
 var character_class: CharacterClass
