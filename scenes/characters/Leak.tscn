@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://leak"]
 
-[ext_resource type="Script" path="res://scripts/leak.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/enemies/leak.gd" id="1"]
 
 [node name="Leak" type="CharacterBody2D"]
 script = ExtResource("1")

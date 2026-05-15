@@ -67,6 +67,7 @@ func apply_lifesteal(attacker: Node, damage_dealt: int, lifesteal: float) -> voi
 
 # ─── AOE DAMAGE ────────────────────────────────────────────
 # Untuk skill Whirlwind, Ground Smash, Dark Circle
+# Returns total damage dealt to all enemies hit
 func apply_aoe_damage(
 		attacker_stats: Dictionary,
 		center_pos:     Vector2,
@@ -74,9 +75,10 @@ func apply_aoe_damage(
 		enemies:        Array,       # Array[Node]
 		skill_data:     Dictionary = {},
 		max_targets:    int = 999
-) -> void:
+) -> int:
 
 	var hit_count: int = 0
+	var total_damage: int = 0
 	for enemy in enemies:
 		if hit_count >= max_targets:
 			break
@@ -85,10 +87,12 @@ func apply_aoe_damage(
 		var enemy_pos: Vector2 = enemy.global_position
 		if center_pos.distance_to(enemy_pos) <= radius:
 			var defense: int = enemy.get("defense") if enemy.get("defense") != null else 0
-			apply_damage(attacker_stats, enemy, skill_data, defense)
+			var dmg: int = apply_damage(attacker_stats, enemy, skill_data, defense)
+			total_damage += dmg
 			hit_count += 1
 
-	print("[DamageSystem] AOE hit ", hit_count, " enemies")
+	print("[DamageSystem] AOE hit ", hit_count, " enemies, total damage: ", total_damage)
+	return total_damage
 
 # ─── DAMAGE SUMMON ────────────────────────────────────────
 # Kalkulasi damage untuk unit summon necromancer

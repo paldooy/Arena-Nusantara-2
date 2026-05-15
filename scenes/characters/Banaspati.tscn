@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://banaspati"]
 
-[ext_resource type="Script" uid="uid://dqyb06wuhftxp" path="res://scripts/banaspati.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqyb06wuhftxp" path="res://scripts/enemies/banaspati.gd" id="1"]
 
 [node name="Banaspati" type="CharacterBody2D" unique_id=392980937]
 collision_layer = 4

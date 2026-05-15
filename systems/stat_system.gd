@@ -22,7 +22,7 @@ enum CharacterClass { BERSERKER, NECROMANCER }
 # ─── BASE STAT LEVEL 1 ─────────────────────────────────────
 const BERSERKER_BASE: Dictionary = {
 	"hp":           70,     # sangat rendah — naik lewat upgrade
-	"damage":        20,     # rendah — naik lewat upgrade attack%
+	"damage":        200,     # rendah — naik lewat upgrade attack%
 	"attack_speed":  0.9,
 	"crit_chance":   0.02,  # 2% base
 	"crit_mult":     1.4,   # 140% base
@@ -118,6 +118,7 @@ func _apply_caps() -> void:
 func apply_blood_aura(_dur: float) -> void:
 	stats["attack_pct"] *= 1.35
 	stats["lifesteal"]   = min(0.20, BERSERKER_CAPS["lifesteal"])
+	_apply_caps()  # Re-apply caps to prevent exceeding damage multiplier limit
 
 func remove_blood_aura() -> void:
 	stats["attack_pct"] /= 1.35

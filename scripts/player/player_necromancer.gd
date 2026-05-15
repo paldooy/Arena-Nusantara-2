@@ -34,11 +34,11 @@ func _ready() -> void:
 	collision_mask  = 1 | 2 | 4
 
 func _process(delta: float) -> void:
-	if is_dead: return
+	if is_dead or not GameManager.is_playing(): return
 	_tick_timers(delta)
 
 func _physics_process(_delta: float) -> void:
-	if is_dead or is_stunned: return
+	if is_dead or is_stunned or not GameManager.is_playing(): return
 	var dir := Vector2(
 		Input.get_axis("move_left",  "move_right"),
 		Input.get_axis("move_up",    "move_down")
@@ -138,11 +138,15 @@ func _execute_skill(skill_id: String) -> void:
 			attack_area.show_circle(
 				data.get("radius", 90.0), Color(0.40, 0.0, 0.80, 0.30), 0.40)
 			await get_tree().create_timer(0.20).timeout
-			damage_system.apply_aoe_damage(
+			var total_dmg: int = damage_system.apply_aoe_damage(
 				class_system.stat_system.stats,
 				global_position, data.get("radius", 90.0),
 				enemies_in_scene, data
 			)
+			# Apply lifesteal if any
+			var ls: float = class_system.stat_system.get_stat("lifesteal")
+			if ls > 0.0 and total_dmg > 0:
+				damage_system.apply_lifesteal(self, total_dmg, ls)
 			await anim.animation_finished
 
 func _tick_timers(delta: float) -> void:
@@ -164,8 +168,8 @@ func take_damage(amount: int) -> void:
 		if amount <= 0: return
 	class_system.take_damage(amount)
 	if not is_attacking:
-		anim.play("hit")
-		await anim.animation_finished
+		if anim.sprite_frames.get_animation_names().has("hit"):
+			anim.play("hit")
 	if not class_system.is_alive():
 		_die()
 
@@ -175,8 +179,8 @@ func heal(amount: int) -> void:
 func _die() -> void:
 	if is_dead: return
 	is_dead = true
-	anim.play("dead")
-	await anim.animation_finished
+	if anim.sprite_frames.get_animation_names().has("dead"):
+		anim.play("dead")
 	GameManager.end_game(false)
 
 func _mark_nearest_enemy(duration: float) -> void:

@@ -96,6 +96,7 @@ func _ready() -> void:
 	print("[GameWorld] Init selesai. Class: ", GameManager.selected_class)
 
 func _process(_delta: float) -> void:
+	if not GameManager.is_playing(): return
 	if player_node:
 		camera.global_position = player_node.global_position
 

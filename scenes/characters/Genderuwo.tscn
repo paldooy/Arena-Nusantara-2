@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://genderuwo"]
 
-[ext_resource type="Script" uid="uid://bw64omn82a17y" path="res://scripts/genderuwo.gd" id="1"]
+[ext_resource type="Script" uid="uid://bw64omn82a17y" path="res://scripts/enemies/genderuwo.gd" id="1"]
 
 [node name="Genderuwo" type="CharacterBody2D" unique_id=284746303]
 collision_layer = 8

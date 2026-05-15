@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://berserker"]
 
-[ext_resource type="Script" uid="uid://b6n4e46baosc3" path="res://scripts/player_berserker.gd" id="1"]
+[ext_resource type="Script" uid="uid://dwxg0yq7b10ih" path="res://scripts/player/player_berserker.gd" id="1"]
 [ext_resource type="Script" uid="uid://cnra16d8c288i" path="res://scripts/attack_area.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://bb2jmrb5k0qt2" path="res://assets/Nusantara/Player/Ksatria/ATTACK.PNG" id="2_1qwft"]
 [ext_resource type="Texture2D" uid="uid://bf8xk3uunydfk" path="res://assets/Nusantara/Player/Ksatria/IDLE.PNG" id="3_1qwft"]
@@ -102,19 +102,19 @@ region = Rect2(192, 0, 64, 64)
 [sub_resource type="SpriteFrames" id="SpriteFrames_hvd10"]
 animations = [{
 "frames": [{
-"duration": 0.6,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_2qyam")
 }, {
-"duration": 0.6,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_f2wqw")
 }, {
-"duration": 0.6,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_2ewf3")
 }, {
-"duration": 0.6,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_1nue7")
 }, {
-"duration": 0.6,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_eabw8")
 }],
 "loop": false,
@@ -122,7 +122,7 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.01,
 "texture": SubResource("AtlasTexture_icfoi")
 }],
 "loop": false,
@@ -207,9 +207,7 @@ shape = SubResource("CircleShape2D_pdciw")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1150201785]
 position = Vector2(-8, -22)
 sprite_frames = SubResource("SpriteFrames_hvd10")
-animation = &"attack"
-frame = 4
-frame_progress = 1.0
+animation = &"dead"
 
 [node name="AttackArea" type="Node2D" parent="." unique_id=1216903765]
 script = ExtResource("2")

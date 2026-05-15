@@ -19,10 +19,10 @@ var exp_to_next: int = 0
 
 const EXP_TABLE: Array[int] = [
 	0,    # level 1  (tidak dipakai)
-	120,  # level 1 → 2
-	150,  # level 2 → 3
-	180,  # level 3 → 4
-	220,  # level 4 → 5
+	12,  # level 1 → 2
+	15,  # level 2 → 3
+	18,  # level 3 → 4
+	22,  # level 4 → 5
 	260,  # level 5 → 6
 	300,  # level 6 → 7
 	340,  # level 7 → 8

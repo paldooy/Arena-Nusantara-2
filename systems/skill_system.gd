@@ -16,7 +16,7 @@ enum CharacterClass { BERSERKER, NECROMANCER }
 const SKILL_DATA: Dictionary = {
 	# ── BERSERKER ──────────────────────────────────────────
 	"berserker_spin": {
-		"id": "berserker_spin", "name": "Whirlwind Slash",
+		"id": "berserker_spin", "name": "Spin anj",
 		"description": "Berputar — serang semua musuh di sekitar (radius 100).",
 		"cooldown": 5.0, "damage_mult": 1.2, "radius": 100.0,
 	},
@@ -30,16 +30,7 @@ const SKILL_DATA: Dictionary = {
 		"description": "Hantam tanah — AOE radius 130, DMG x2.8, stun 1.5 detik.",
 		"cooldown": 12.0, "damage_mult": 2.8, "radius": 130.0, "stun_duration": 1.5,
 	},
-	"berserker_warcry": {
-		"id": "berserker_warcry", "name": "War Cry",
-		"description": "Attack speed & move speed +40% selama 5 detik.",
-		"cooldown": 15.0, "buff_duration": 5.0, "spd_bonus_pct": 0.40,
-	},
-	"berserker_charge": {
-		"id": "berserker_charge", "name": "Berserker Charge",
-		"description": "Melesat maju — hit musuh pertama, stun 2 detik + DMG x1.5.",
-		"cooldown": 10.0, "damage_mult": 1.5, "stun_duration": 2.0, "charge_distance": 200.0,
-	},
+	
 	# ── NECROMANCER ────────────────────────────────────────
 	"necromancer_mark": {
 		"id": "necromancer_mark", "name": "Soul Mark",
@@ -70,7 +61,6 @@ const SKILL_DATA: Dictionary = {
 
 const BERSERKER_FULL_POOL: Array = [
 	"berserker_spin", "berserker_blood_aura", "berserker_ground_smash",
-	"berserker_warcry", "berserker_charge",
 ]
 const NECROMANCER_FULL_POOL: Array = [
 	"necromancer_mark", "necromancer_summon_buff", "necromancer_dark_circle",
@@ -81,9 +71,11 @@ var character_class: CharacterClass
 var learned_skills:  Array[String] = []
 var cooldowns:       Dictionary    = {}
 var _lv5_offered:    Array         = []
+var stat_system:     Node          = null  # Reference to apply CD reduction
 
-func init(cls: CharacterClass) -> void:
+func init(cls: CharacterClass, ss: Node = null) -> void:
 	character_class = cls
+	stat_system = ss  # Store reference to stat_system
 	learned_skills.clear()
 	cooldowns.clear()
 	_lv5_offered.clear()
@@ -138,7 +130,11 @@ func can_use(skill_id: String) -> bool:
 
 func use_skill(skill_id: String) -> bool:
 	if not can_use(skill_id): return false
-	cooldowns[skill_id] = SKILL_DATA[skill_id]["cooldown"]
+	var base_cd: float = SKILL_DATA[skill_id]["cooldown"]
+	# Apply CD reduction stat if stat_system is available
+	if stat_system and stat_system.has_method("get_cd_multiplier"):
+		base_cd *= stat_system.get_cd_multiplier()
+	cooldowns[skill_id] = base_cd
 	return true
 
 func get_cooldown_ratio(skill_id: String) -> float:

@@ -63,7 +63,7 @@ func _input(event: InputEvent) -> void:
 
 # ─── SERANGAN MANUAL ──────────────────────────────────────
 func _try_attack_at(world_pos: Vector2) -> void:
-	if class_system == null or damage_system == null:
+	if class_system == null or class_system.stat_system == null or damage_system == null:
 		return
 	for enemy in enemies_in_scene:
 		if not is_instance_valid(enemy):
@@ -77,7 +77,7 @@ func _try_attack_at(world_pos: Vector2) -> void:
 			)
 			# Lifesteal
 			var ls: float = class_system.stat_system.get_stat("lifesteal")
-			damage_system.apply_lifesteal(class_system, dmg, ls)
+			damage_system.apply_lifesteal(self, dmg, ls)
 			break
 
 # ─── SKILL 1 ──────────────────────────────────────────────
@@ -99,13 +99,17 @@ func _use_skill_1() -> void:
 
 	if skill_id == "berserker_spin":
 		# AOE di sekitar player
-		damage_system.apply_aoe_damage(
+		var total_dmg: int = damage_system.apply_aoe_damage(
 			class_system.stat_system.stats,
 			global_position,
 			data.get("radius", 100.0),
 			enemies_in_scene,
 			data
 		)
+		# Apply lifesteal for total damage dealt
+		var ls: float = class_system.stat_system.get_stat("lifesteal")
+		if ls > 0.0 and total_dmg > 0:
+			damage_system.apply_lifesteal(self, total_dmg, ls)
 		anim_sprite.play("spin")
 
 	elif skill_id == "necromancer_mark":
@@ -129,6 +133,9 @@ func _use_skill_2() -> void:
 	var data: Dictionary = skill_system.get_skill_data(skill_id)
 
 	if skill_id == "berserker_blood_aura":
+		# Remove old buff if already active, then apply new one (prevents stacking)
+		if is_blood_aura_active:
+			class_system.stat_system.remove_blood_aura()
 		blood_aura_timer = data.get("buff_duration", 6.0)
 		is_blood_aura_active = true
 		class_system.stat_system.apply_blood_aura(blood_aura_timer)
@@ -154,13 +161,17 @@ func _use_skill_3() -> void:
 	var data: Dictionary = skill_system.get_skill_data(skill_id)
 
 	if skill_id == "berserker_ground_smash":
-		damage_system.apply_aoe_damage(
+		var total_dmg: int = damage_system.apply_aoe_damage(
 			class_system.stat_system.stats,
 			global_position,
 			data.get("radius", 130.0),
 			enemies_in_scene,
 			data
 		)
+		# Apply lifesteal for total damage dealt
+		var ls: float = class_system.stat_system.get_stat("lifesteal")
+		if ls > 0.0 and total_dmg > 0:
+			damage_system.apply_lifesteal(self, total_dmg, ls)
 		# Stun musuh di dalam radius
 		for enemy in enemies_in_scene:
 			if is_instance_valid(enemy) and global_position.distance_to(enemy.global_position) <= data.get("radius", 130.0):
@@ -169,13 +180,17 @@ func _use_skill_3() -> void:
 		anim_sprite.play("ground_smash")
 
 	elif skill_id == "necromancer_dark_circle":
-		damage_system.apply_aoe_damage(
+		var total_dmg: int = damage_system.apply_aoe_damage(
 			class_system.stat_system.stats,
 			global_position,
 			data.get("radius", 90.0),
 			enemies_in_scene,
 			data
 		)
+		# Apply lifesteal if any
+		var ls: float = class_system.stat_system.get_stat("lifesteal")
+		if ls > 0.0 and total_dmg > 0:
+			damage_system.apply_lifesteal(self, total_dmg, ls)
 		anim_sprite.play("dark_circle")
 
 # ─── HELPERS ──────────────────────────────────────────────
@@ -196,9 +211,10 @@ func _apply_summon_buff(data: Dictionary) -> void:
 	var buff_pct: float = data.get("buff_pct", 0.40)
 	var duration: float = data.get("buff_duration", 8.0)
 	class_system.stat_system.apply_summon_buff_pct(buff_pct)
-	# Hilangkan buff setelah durasi lewat
+	# Hilangkan buff setelah durasi lewat (hanya jika masih hidup)
 	await get_tree().create_timer(duration).timeout
-	class_system.stat_system.remove_summon_buff_pct(buff_pct)
+	if is_instance_valid(self) and class_system and class_system.is_alive():
+		class_system.stat_system.remove_summon_buff_pct(buff_pct)
 
 # ─── TICK TIMERS ──────────────────────────────────────────
 func _tick_stun(delta: float) -> void:
@@ -217,13 +233,9 @@ func _tick_blood_aura(delta: float) -> void:
 func _tick_passive_summon(delta: float) -> void:
 	if skill_system == null:
 		return
-	if "necromancer_passive" not in skill_system.get_learned_skills():
-		return
-	var data: Dictionary = skill_system.get_skill_data("necromancer_passive")
-	passive_summon_timer += delta
-	if passive_summon_timer >= data.get("spawn_interval", 30.0):
-		passive_summon_timer = 0.0
-		_try_spawn_passive_summon()
+	# TODO: Implement passive summon skill "necromancer_passive" if needed
+	# Currently disabled: skill doesn't exist in skill pool
+	return
 
 func _try_spawn_passive_summon() -> void:
 	# Sinyal ke game_world untuk spawn summon
@@ -247,6 +259,6 @@ func heal(amount: int) -> void:
 func _update_animation(direction: Vector2) -> void:
 	if direction.length() > 0.1:
 		anim_sprite.play("walk")
-		anim_sprite.flip_h = direction.x < 0
+		anim_sprite.flip_h = direction.x < 0  # Flip when moving left (x < 0)
 	else:
 		anim_sprite.play("idle")

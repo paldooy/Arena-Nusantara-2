@@ -34,11 +34,11 @@ func _ready() -> void:
 	collision_mask  = 1 | 2 | 4
 
 func _process(delta: float) -> void:
-	if is_dead: return
+	if is_dead or not GameManager.is_playing(): return
 	_tick_timers(delta)
 
 func _physics_process(_delta: float) -> void:
-	if is_dead or is_stunned: return
+	if is_dead or is_stunned or not GameManager.is_playing(): return
 	var dir := Vector2(
 		Input.get_axis("move_left",  "move_right"),
 		Input.get_axis("move_up",    "move_down")
@@ -106,14 +106,21 @@ func _execute_skill(skill_id: String) -> void:
 			var radius: float = 80.0
 			attack_area.show_circle(radius, Color(1.0, 0.20, 0.10, 0.22), 0.5)
 			await get_tree().create_timer(0.15).timeout
-			damage_system.apply_aoe_damage(
+			var total_dmg: int = damage_system.apply_aoe_damage(
 				class_system.stat_system.stats,
 				global_position, radius, enemies_in_scene, data
 			)
+			# Apply lifesteal for total damage
+			var ls: float = class_system.stat_system.get_stat("lifesteal")
+			if ls > 0.0 and total_dmg > 0:
+				damage_system.apply_lifesteal(self, total_dmg, ls)
 			await anim.animation_finished
 
 		"berserker_blood_aura":
 			anim.play(anim_name)
+			# Remove old buff if already active, then apply new one (prevents stacking)
+			if blood_aura_active:
+				class_system.stat_system.remove_blood_aura()
 			blood_aura_timer  = data.get("buff_duration", 6.0)
 			blood_aura_active = true
 			class_system.stat_system.apply_blood_aura(blood_aura_timer)
@@ -126,10 +133,14 @@ func _execute_skill(skill_id: String) -> void:
 			var smash_r: float = 100.0
 			attack_area.show_circle(smash_r, Color(1.0, 0.30, 0.0, 0.22), 0.5)
 			await get_tree().create_timer(0.25).timeout
-			damage_system.apply_aoe_damage(
+			var total_dmg: int = damage_system.apply_aoe_damage(
 				class_system.stat_system.stats,
 				global_position, smash_r, enemies_in_scene, data
 			)
+			# Apply lifesteal for total damage
+			var ls: float = class_system.stat_system.get_stat("lifesteal")
+			if ls > 0.0 and total_dmg > 0:
+				damage_system.apply_lifesteal(self, total_dmg, ls)
 			for enemy in enemies_in_scene:
 				if not is_instance_valid(enemy): continue
 				if global_position.distance_to(enemy.global_position) <= smash_r:
@@ -137,30 +148,6 @@ func _execute_skill(skill_id: String) -> void:
 						enemy.apply_stun(data.get("stun_duration", 1.5))
 			await anim.animation_finished
 
-		"berserker_warcry":
-			anim.play(anim_name)
-			attack_area.show_circle(40.0, Color(1.0, 0.8, 0.0, 0.18), 0.4)
-			await anim.animation_finished
-
-		"berserker_charge":
-			anim.play(anim_name)
-			var charge_dir: Vector2 = Vector2.RIGHT if facing_right else Vector2.LEFT
-			var tween = create_tween()
-			tween.tween_property(self, "global_position",
-				global_position + charge_dir * data.get("charge_distance", 200.0), 0.18)
-			await tween.finished
-			attack_area.show_arc(50.0, facing_right, 0.4)
-			for enemy in enemies_in_scene:
-				if not is_instance_valid(enemy): continue
-				if global_position.distance_to(enemy.global_position) <= 50.0:
-					damage_system.apply_damage(
-						class_system.stat_system.stats, enemy, data,
-						enemy.get("defense") if enemy.get("defense") != null else 0
-					)
-					if enemy.has_method("apply_stun"):
-						enemy.apply_stun(data.get("stun_duration", 2.0))
-					break
-			await anim.animation_finished
 
 # ─── TIMERS ────────────────────────────────────────────────
 func _tick_timers(delta: float) -> void:
@@ -178,8 +165,8 @@ func take_damage(amount: int) -> void:
 	if is_dead or class_system == null: return
 	class_system.take_damage(amount)
 	if not is_attacking:
-		anim.play("hit")
-		await anim.animation_finished
+		if anim.sprite_frames.get_animation_names().has("hit"):
+			anim.play("hit")
 	if not class_system.is_alive():
 		_die()
 
@@ -189,8 +176,8 @@ func heal(amount: int) -> void:
 func _die() -> void:
 	if is_dead: return
 	is_dead = true
-	anim.play("dead")
-	await anim.animation_finished
+	if anim.sprite_frames.get_animation_names().has("dead"):
+		anim.play("dead")
 	GameManager.end_game(false)
 
 func _apply_lifesteal(dmg: int) -> void:
@@ -205,7 +192,7 @@ func apply_stun(duration: float) -> void:
 func _update_facing(dir: Vector2) -> void:
 	if dir.x > 0.05:    facing_right = true
 	elif dir.x < -0.05: facing_right = false
-	anim.flip_h = not facing_right
+	anim.flip_h = facing_right
 
 func _update_animation(dir: Vector2) -> void:
 	if is_attacking: return

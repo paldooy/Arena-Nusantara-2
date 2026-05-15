@@ -1,4 +1,4 @@
-extends "res://scripts/enemy_base.gd"
+extends "res://scripts/enemies/enemy_base.gd"
 
 # ============================================================
 # banaspati.gd — Tier 2 (Mid Game)

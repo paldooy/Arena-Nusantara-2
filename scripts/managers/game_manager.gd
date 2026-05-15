@@ -2,7 +2,8 @@ extends Node
 
 # ============================================================
 # game_manager.gd  — AUTOLOAD (singleton)
-# Daftarkan di: Project > Project Settings > Autoload
+# Global state: class yang dipilih, state game, restart
+# Daftarkan di Project > Project Settings > Autoload
 # Node name: GameManager
 # ============================================================
 
@@ -15,12 +16,14 @@ enum CharacterClass { BERSERKER, NECROMANCER }
 var game_state: GameState = GameState.MENU
 var selected_class: CharacterClass = CharacterClass.BERSERKER
 
-const SCENE_MAIN_MENU  = "res://scenes/MainMenu.tscn"
+# Path scene
+const SCENE_MAIN_MENU = "res://scenes/MainMenu.tscn"
 const SCENE_GAME_WORLD = "res://scenes/GameWorld.tscn"
 
 func start_game(cls: CharacterClass) -> void:
 	selected_class = cls
 	game_state = GameState.PLAYING
+	get_tree().paused = false
 	emit_signal("on_game_started", CharacterClass.keys()[cls])
 	get_tree().change_scene_to_file(SCENE_GAME_WORLD)
 
@@ -29,10 +32,12 @@ func end_game(win: bool) -> void:
 		game_state = GameState.WIN
 	else:
 		game_state = GameState.LOSE
+	get_tree().paused = true
 	emit_signal("on_game_over", win)
 
 func restart() -> void:
 	game_state = GameState.MENU
+	get_tree().paused = false
 	get_tree().change_scene_to_file(SCENE_MAIN_MENU)
 
 func is_playing() -> bool:

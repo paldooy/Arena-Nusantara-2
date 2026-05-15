@@ -23,7 +23,7 @@ func init_class(cls: CharacterClass) -> void:
 	selected_class = cls
 
 	stat_system.init(cls)
-	skill_system.init(cls)
+	skill_system.init(cls, stat_system)  # ← inject stat_system for CD reduction
 	stat_upgrade_system.init(cls, stat_system)  # ← inject stat_system
 
 	level_system.level       = 1

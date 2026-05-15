@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://necromancer"]
 
-[ext_resource type="Script" path="res://scripts/player_necromancer.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player/player_necromancer.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/attack_area.gd" id="2"]
 
 [node name="Necromancer" type="CharacterBody2D"]

@@ -81,7 +81,7 @@ func setup(stats: Dictionary, type: int) -> void:
 		hp_bar.value     = current_hp
 
 func _physics_process(delta: float) -> void:
-	if is_dying: return
+	if is_dying or not anim_sprite: return
 	_tick_stun(delta)
 	if is_stunned or player == null: return
 
@@ -111,19 +111,20 @@ func _do_attack() -> void:
 		player.take_damage(damage)
 
 func take_damage(amount: int) -> void:
-	if is_dying: return
+	if is_dying or not anim_sprite: return
 	var final_dmg: int = max(1, amount - defense)
 	current_hp -= final_dmg
 	current_hp  = max(current_hp, 0)
 	if hp_bar:
 		hp_bar.value = current_hp
 	if anim_sprite.animation != "attack" and not _in_attack_anim:
-		anim_sprite.play("hit")
+		if anim_sprite.sprite_frames.get_animation_names().has("hit"):
+			anim_sprite.play("hit")
 	if current_hp <= 0:
 		_die()
 
 func _die() -> void:
-	if is_dying: return
+	if is_dying or not anim_sprite: return
 	is_dying = true
 	velocity = Vector2.ZERO
 	remove_from_group("enemies")
