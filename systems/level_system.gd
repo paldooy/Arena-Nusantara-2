@@ -23,16 +23,16 @@ const EXP_TABLE: Array[int] = [
 	15,  # level 2 → 3
 	18,  # level 3 → 4
 	22,  # level 4 → 5
-	260,  # level 5 → 6
-	300,  # level 6 → 7
+	26,  # level 5 → 6
+	30,  # level 6 → 7
 	340,  # level 7 → 8
-	380,  # level 8 → 9
-	420,  # level 9 → 10
-	460,  # level 10 → 11
-	500,  # level 11 → 12
-	540,  # level 12 → 13
-	580,  # level 13 → 14
-	620,  # level 14 → 15
+	38,  # level 8 → 9
+	42,  # level 9 → 10
+	46,  # level 10 → 11
+	50,  # level 11 → 12
+	54,  # level 12 → 13
+	58,  # level 13 → 14
+	62,  # level 14 → 15
 ]
 
 func _ready() -> void:

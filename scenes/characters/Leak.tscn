@@ -1,16 +1,47 @@
 [gd_scene format=3 uid="uid://leak"]
 
-[ext_resource type="Script" path="res://scripts/enemies/leak.gd" id="1"]
+[ext_resource type="Script" uid="uid://dd6s70wpai2ch" path="res://scripts/enemies/leak.gd" id="1"]
 
-[node name="Leak" type="CharacterBody2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c7jju"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kvw01"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="Leak" type="CharacterBody2D" unique_id=295147010]
 script = ExtResource("1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=968810587]
+shape = SubResource("CapsuleShape2D_c7jju")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=332411079]
+sprite_frames = SubResource("SpriteFrames_kvw01")
+animation = &"walk"
 
-[node name="HpBar" type="ProgressBar" parent="."]
-position = Vector2(-36, -58)
+[node name="HpBar" type="ProgressBar" parent="." unique_id=1418001818]
 custom_minimum_size = Vector2(72, 8)
-show_percentage = false
+offset_left = -36.0
+offset_top = -58.0
+offset_right = -36.0
+offset_bottom = -58.0
 value = 100.0
+show_percentage = false

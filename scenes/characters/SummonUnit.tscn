@@ -1,10 +1,38 @@
-[gd_scene load_steps=2 format=3 uid="uid://summon_unit"]
+[gd_scene format=3 uid="uid://ym63bq1wwqog"]
 
-[ext_resource type="Script" path="res://scripts/managers/summon_unit.gd" id="1"]
+[ext_resource type="Script" uid="uid://d2666lw2um380" path="res://scripts/managers/summon_unit.gd" id="1"]
 
-[node name="SummonUnit" type="CharacterBody2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_3d30a"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rrke4"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="SummonUnit" type="CharacterBody2D" unique_id=1341972700]
 script = ExtResource("1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1183964685]
+shape = SubResource("CircleShape2D_3d30a")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1689938028]
+sprite_frames = SubResource("SpriteFrames_rrke4")
+animation = &"walk"

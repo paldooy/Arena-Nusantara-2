@@ -1,14 +1,42 @@
 [gd_scene format=3 uid="uid://genderuwo"]
 
-[ext_resource type="Script" uid="uid://bw64omn82a17y" path="res://scripts/enemies/genderuwo.gd" id="1"]
+[ext_resource type="Script" uid="uid://lwywung3b2gn" path="res://scripts/enemies/genderuwo.gd" id="1"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_khbur"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qn1ov"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
 
 [node name="Genderuwo" type="CharacterBody2D" unique_id=284746303]
 collision_layer = 8
 script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1511475488]
+shape = SubResource("CapsuleShape2D_khbur")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=114817828]
+sprite_frames = SubResource("SpriteFrames_qn1ov")
+animation = &"attack"
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=1234650180]
 custom_minimum_size = Vector2(48, 6)

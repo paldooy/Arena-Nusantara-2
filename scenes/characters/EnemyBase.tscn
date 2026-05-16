@@ -1,13 +1,26 @@
 [gd_scene format=3 uid="uid://prkfrmcxefci"]
 
-[ext_resource type="Script" uid="uid://ckdr584orifxd" path="res://scripts/enemies/enemy_base.gd" id="1"]
+[ext_resource type="Script" uid="uid://c2yga7ksc2s50" path="res://scripts/enemies/enemy_base.gd" id="1"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x467x"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ltljk"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}]
 
 [node name="EnemyBase" type="CharacterBody2D" unique_id=785537193]
 script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1701620886]
+shape = SubResource("CapsuleShape2D_x467x")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1578291647]
+sprite_frames = SubResource("SpriteFrames_ltljk")
+animation = &"dead"
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=389193075]
 custom_minimum_size = Vector2(40, 6)
