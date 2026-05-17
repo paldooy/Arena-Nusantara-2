@@ -96,7 +96,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8ggef")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack",
 "speed": 5.0
 }, {
@@ -165,7 +165,7 @@ shape = SubResource("CapsuleShape2D_jrknr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=276336140]
 sprite_frames = SubResource("SpriteFrames_2l37w")
-animation = &"walk"
+animation = &"attack"
 
 [node name="AttackArea" type="Node2D" parent="." unique_id=1338450909]
 script = ExtResource("2")
