@@ -35,7 +35,7 @@ const BERSERKER_BASE: Dictionary = {
 
 const NECROMANCER_BASE: Dictionary = {
 	"hp":                70,    # sangat rendah
-	"damage":             5,    # sangat rendah
+	"damage":             500,    # sangat rendah
 	"attack_speed":       1.1,
 	"crit_chance":        0.02,
 	"crit_mult":          1.3,

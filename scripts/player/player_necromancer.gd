@@ -202,7 +202,7 @@ func apply_stun(duration: float) -> void:
 func _update_facing(dir: Vector2) -> void:
 	if dir.x > 0.05:    facing_right = true
 	elif dir.x < -0.05: facing_right = false
-	anim.flip_h = not facing_right
+	anim.flip_h = facing_right
 
 func _update_animation(dir: Vector2) -> void:
 	if is_attacking: return

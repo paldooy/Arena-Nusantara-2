@@ -106,7 +106,7 @@ class _FireZone extends Node2D:
 	var damage:     int   = 8
 	var duration:   float = 3.0
 	var radius:     float = 40.0
-	var dmg_tick:   float = 0.5
+	var dmg_tick:   float = 1
 	var player_ref: Node  = null
 
 	var _elapsed:    float = 0.0
