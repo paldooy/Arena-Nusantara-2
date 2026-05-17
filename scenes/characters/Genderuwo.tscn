@@ -1,8 +1,38 @@
 [gd_scene format=3 uid="uid://genderuwo"]
 
 [ext_resource type="Script" uid="uid://lwywung3b2gn" path="res://scripts/enemies/genderuwo.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://b7qebq8t1oxt" path="res://assets/Nusantara/Enemy/Genderuwo/Idle.png" id="2_mqmlc"]
+[ext_resource type="Texture2D" uid="uid://cyn6yppug8jal" path="res://assets/Nusantara/Enemy/Genderuwo/Walk.png" id="3_hp1dc"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_khbur"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_prcxe"]
+atlas = ExtResource("2_mqmlc")
+region = Rect2(80, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khdxu"]
+atlas = ExtResource("2_mqmlc")
+region = Rect2(0, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lwoto"]
+atlas = ExtResource("2_mqmlc")
+region = Rect2(80, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nmlo3"]
+atlas = ExtResource("3_hp1dc")
+region = Rect2(0, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71duu"]
+atlas = ExtResource("3_hp1dc")
+region = Rect2(80, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_502qu"]
+atlas = ExtResource("3_hp1dc")
+region = Rect2(160, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hxclw"]
+atlas = ExtResource("3_hp1dc")
+region = Rect2(240, 0, 80, 80)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_qn1ov"]
 animations = [{
@@ -11,17 +41,38 @@ animations = [{
 "name": &"attack",
 "speed": 5.0
 }, {
-"frames": [],
-"loop": true,
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_prcxe")
+}],
+"loop": false,
 "name": &"dead",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khdxu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lwoto")
+}],
 "loop": true,
 "name": &"idle",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nmlo3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71duu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_502qu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hxclw")
+}],
 "loop": true,
 "name": &"walk",
 "speed": 5.0
@@ -36,7 +87,7 @@ shape = SubResource("CapsuleShape2D_khbur")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=114817828]
 sprite_frames = SubResource("SpriteFrames_qn1ov")
-animation = &"attack"
+animation = &"walk"
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=1234650180]
 custom_minimum_size = Vector2(48, 6)
