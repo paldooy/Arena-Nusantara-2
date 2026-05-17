@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://d3mv3jgpty4ff" path="res://assets/Nusantara/Player/Dukun/DAMAGED 2.png" id="4_g7gyx"]
 [ext_resource type="Texture2D" uid="uid://lkuq7lr01joh" path="res://assets/Nusantara/Player/Dukun/IDLE 2.png" id="5_2l37w"]
 [ext_resource type="Texture2D" uid="uid://cjljrcccgktg3" path="res://assets/Nusantara/Player/Dukun/RUN 2.png" id="6_rcfyq"]
+[ext_resource type="Texture2D" uid="uid://6i3fff8fik1h" path="res://assets/Nusantara/Player/Dukun/SKILL 1.png" id="6_wiwr2"]
+[ext_resource type="Texture2D" uid="uid://o1etnwx4amj1" path="res://assets/Nusantara/Player/Dukun/SKILL 2 (BUFF).png" id="7_g7gyx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jrknr"]
 
@@ -62,6 +64,22 @@ region = Rect2(0, 0, 64, 64)
 atlas = ExtResource("5_2l37w")
 region = Rect2(64, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_g7gyx"]
+atlas = ExtResource("6_wiwr2")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2l37w"]
+atlas = ExtResource("6_wiwr2")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rcfyq"]
+atlas = ExtResource("7_g7gyx")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_shy8n"]
+atlas = ExtResource("7_g7gyx")
+region = Rect2(64, 0, 64, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_c6ljj"]
 atlas = ExtResource("6_rcfyq")
 region = Rect2(0, 0, 64, 64)
@@ -81,19 +99,19 @@ region = Rect2(192, 0, 64, 64)
 [sub_resource type="SpriteFrames" id="SpriteFrames_2l37w"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_hhonw")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_6avh6")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_aol2v")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_pffk4")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_8ggef")
 }],
 "loop": false,
@@ -101,30 +119,30 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 1.5,
 "texture": SubResource("AtlasTexture_3gbla")
 }, {
-"duration": 1.0,
+"duration": 1.5,
 "texture": SubResource("AtlasTexture_lmrrk")
 }, {
-"duration": 1.0,
+"duration": 1.5,
 "texture": SubResource("AtlasTexture_hsdjt")
 }],
-"loop": true,
+"loop": false,
 "name": &"dead",
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_k374b")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_m6xj7")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_httsj")
 }],
-"loop": true,
+"loop": false,
 "name": &"hit",
 "speed": 5.0
 }, {
@@ -141,6 +159,28 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_g7gyx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2l37w")
+}],
+"loop": false,
+"name": &"mark",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rcfyq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_shy8n")
+}],
+"loop": true,
+"name": &"summon_buff",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_c6ljj")
 }, {
 "duration": 1.0,
@@ -152,7 +192,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_3vkhh")
 }],
-"loop": true,
+"loop": false,
 "name": &"walk",
 "speed": 5.0
 }]
@@ -165,7 +205,7 @@ shape = SubResource("CapsuleShape2D_jrknr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=276336140]
 sprite_frames = SubResource("SpriteFrames_2l37w")
-animation = &"attack"
+animation = &"summon_buff"
 
 [node name="AttackArea" type="Node2D" parent="." unique_id=1338450909]
 script = ExtResource("2")

@@ -16,7 +16,7 @@ enum CharacterClass { BERSERKER, NECROMANCER }
 const SKILL_DATA: Dictionary = {
 	# ── BERSERKER ──────────────────────────────────────────
 	"berserker_spin": {
-		"id": "berserker_spin", "name": "Spin anj",
+		"id": "berserker_spin", "name": "Whirlwind Spin",
 		"description": "Berputar — serang semua musuh di sekitar (radius 100).",
 		"cooldown": 5.0, "damage_mult": 1.2, "radius": 100.0,
 	},

@@ -92,6 +92,11 @@ func _ready() -> void:
 	hud.class_system = class_system
 	hud.skill_system = skill_system
 
+	# ── Step 7: Spawn initial summon for Necromancer ─────────
+	if GameManager.selected_class == GameManager.CharacterClass.NECROMANCER:
+		await get_tree().process_frame
+		_try_spawn_summon(player_node.global_position + Vector2(60, 0))
+
 	camera.position = player_node.position
 	print("[GameWorld] Init selesai. Class: ", GameManager.selected_class)
 

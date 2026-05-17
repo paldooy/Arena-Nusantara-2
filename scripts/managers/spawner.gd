@@ -130,13 +130,13 @@ func _sync_enemy_list() -> void:
 		p.enemies_in_scene = active_enemies
 
 func _random_spawn_pos() -> Vector2:
-	var m: float = 35.0
-	match randi() % 4:
-		0: return Vector2(randf_range(0, arena_size.x), -m)
-		1: return Vector2(randf_range(0, arena_size.x), arena_size.y + m)
-		2: return Vector2(-m, randf_range(0, arena_size.y))
-		3: return Vector2(arena_size.x + m, randf_range(0, arena_size.y))
-	return Vector2(arena_size.x / 2.0, -m)
+	var m: float = 50.0
+	# Only spawn from top/bottom edges (where ground exists)
+	# Restrict X to middle section to avoid water/cliff edges
+	if randi() % 2 == 0:
+		return Vector2(randf_range(100, arena_size.x - 100), -m)
+	else:
+		return Vector2(randf_range(100, arena_size.x - 100), arena_size.y + m)
 
 func _get_scene(enemy_type: int) -> PackedScene:
 	match enemy_type:

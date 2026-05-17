@@ -8,7 +8,7 @@ extends CharacterBody2D
 signal request_passive_summon()
 
 const BASE_ATTACK_INTERVAL: float = 0.80
-const PASSIVE_INTERVAL:     float = 30.0
+const PASSIVE_INTERVAL:     float = 10.0
 
 var class_system:     Node  = null
 var skill_system:     Node  = null
@@ -21,7 +21,7 @@ var is_stunned:      bool  = false
 var stun_timer:      float = 0.0
 var attack_cooldown: float = 0.0
 var is_attacking:    bool  = false
-var passive_timer:   float = 0.0
+var passive_timer:   float = 15.0  # Start at 15s (will fire at 45s total with 30s interval)
 var _shield_hp:      int   = 0
 
 @onready var anim:        AnimatedSprite2D = $AnimatedSprite2D

@@ -122,8 +122,8 @@ speed_scale = 1.5
 [node name="HpBar" type="ProgressBar" parent="." unique_id=179794743]
 custom_minimum_size = Vector2(40, 5)
 offset_left = -20.0
-offset_top = -30.0
-offset_right = -20.0
+offset_top = -35.0
+offset_right = 20.0
 offset_bottom = -30.0
 value = 100.0
 show_percentage = false

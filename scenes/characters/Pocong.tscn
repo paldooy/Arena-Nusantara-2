@@ -132,13 +132,13 @@ shape = SubResource("CircleShape2D_cwe88")
 position = Vector2(0, -18.000002)
 scale = Vector2(1.005, 1.005)
 sprite_frames = SubResource("SpriteFrames_6a2b3")
-animation = &"walk"
+animation = &"dead"
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=73643391]
 custom_minimum_size = Vector2(40, 5)
-offset_left = -20.0
-offset_top = -34.0
-offset_right = -20.0
-offset_bottom = -34.0
+offset_left = -19.0
+offset_top = -53.0
+offset_right = 21.0
+offset_bottom = -48.0
 value = 100.0
 show_percentage = false

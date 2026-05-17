@@ -91,9 +91,9 @@ animation = &"walk"
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=1234650180]
 custom_minimum_size = Vector2(48, 6)
-offset_left = -24.0
-offset_top = -44.0
-offset_right = -24.0
-offset_bottom = -44.0
+offset_left = -23.0
+offset_top = -39.0
+offset_right = 25.0
+offset_bottom = -33.0
 value = 100.0
 show_percentage = false
