@@ -23,12 +23,12 @@ enum CharacterClass { BERSERKER, NECROMANCER }
 const BERSERKER_BASE: Dictionary = {
 	"hp":           70,     # sangat rendah — naik lewat upgrade
 	"damage":        25,     # rendah — naik lewat upgrade attack%
-	"attack_speed":  0.9,
-	"crit_chance":   0.02,  # 2% base
+	"attack_speed":  1.3,
+	"crit_chance":   0.1,  # 2% base
 	"crit_mult":     1.4,   # 140% base
-	"lifesteal":     0.0,
-	"defense":       1,     # hampir nol
-	"move_speed":  145.0,   # lebih cepat dari musuh (80–95)
+	"lifesteal":     0.1,
+	"defense":       3,     # hampir nol
+	"move_speed":  160.0,   # lebih cepat dari musuh (80–95)
 	"attack_pct":    1.0,   # multiplier damage (1.0 = normal)
 	"cd_reduction":  0.0,   # 0% pengurangan cooldown
 }

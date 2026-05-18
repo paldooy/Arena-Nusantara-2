@@ -26,6 +26,18 @@ var spawn_interval:       float   = 3.2
 var is_boss_spawned:      bool    = false
 var active_enemies:       Array   = []
 
+const ENEMY_MAX: Dictionary = {
+	0: 15, # Pocong
+	1: 10, # Banaspati
+	2: 10, # Genderuwo
+}
+
+var enemy_counts: Dictionary = {
+	0: 0,
+	1: 0,
+	2: 0,
+}
+
 # Layer index TileMap untuk "ground" — sesuaikan dengan project kamu
 # Biasanya layer 0 adalah ground
 const GROUND_LAYER_INDEX: int = 0
@@ -81,7 +93,9 @@ func _process(delta: float) -> void:
 
 # ── SPAWN MUSUH BIASA ──────────────────────────────────────
 func _spawn_enemy() -> void:
-	var enemy_type: int    = enemy_balance.pick_random_enemy(current_player_level)
+	var enemy_type: int    = _pick_enemy_with_caps(current_player_level)
+	if enemy_type == -1:
+		return
 	var stats: Dictionary  = enemy_balance.generate_enemy_stats(enemy_type, current_player_level)
 	var scene: PackedScene = _get_scene(enemy_type)
 	if scene == null:
@@ -101,6 +115,8 @@ func _spawn_enemy() -> void:
 	instance.setup(stats, enemy_type)
 	instance.on_died.connect(_on_enemy_died)
 	active_enemies.append(instance)
+	if enemy_counts.has(enemy_type):
+		enemy_counts[enemy_type] += 1
 	_sync_enemy_list()
 
 	print("[Spawner] Spawn %s @ %s | HP:%d DMG:%d" % [
@@ -190,6 +206,8 @@ func spawn_boss() -> void:
 # ── CALLBACKS ──────────────────────────────────────────────
 func _on_enemy_died(enemy_node: Node, enemy_type: int) -> void:
 	active_enemies.erase(enemy_node)
+	if enemy_counts.has(enemy_type):
+		enemy_counts[enemy_type] = max(0, int(enemy_counts[enemy_type]) - 1)
 
 	if is_instance_valid(enemy_node) and enemy_node.is_marked:
 		var gw = get_parent()
@@ -218,3 +236,18 @@ func _get_scene(enemy_type: int) -> PackedScene:
 		1: return SCENE_BANASPATI
 		2: return SCENE_GENDERUWO
 		_: return null
+
+func _pick_enemy_with_caps(lv: int) -> int:
+	var table: Array = enemy_balance.get_spawn_table_for_level(lv)
+	var candidates: Array = []
+	for t in table:
+		if not ENEMY_MAX.has(t):
+			candidates.append(t)
+			continue
+		var current: int = int(enemy_counts.get(t, 0))
+		var cap: int = int(ENEMY_MAX[t])
+		if current < cap:
+			candidates.append(t)
+	if candidates.size() == 0:
+		return -1
+	return candidates[randi() % candidates.size()]
