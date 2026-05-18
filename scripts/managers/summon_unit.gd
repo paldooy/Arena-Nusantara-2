@@ -6,6 +6,7 @@ extends CharacterBody2D
 # ============================================================
 
 var base_damage: int = 12
+var base_hp:     int = 60
 var move_speed: float = 90.0
 var attack_range: float = 50.0
 var current_hp: int = 60
@@ -18,6 +19,11 @@ var summon_hp_pct: float = 1.0
 var target_enemy: Node = null
 var attack_timer: float = 0.0
 var owner_player: Node = null
+var buff_fx: AnimatedSprite2D = null
+var mark_fx: AnimatedSprite2D = null
+
+const NECRO_SCENE: PackedScene = preload("res://scenes/characters/Necromancer.tscn")
+static var _necro_frames: SpriteFrames = null
 
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -26,10 +32,54 @@ func _ready() -> void:
 
 func setup(dmg: int, hp: int, dmg_pct: float, hp_pct: float) -> void:
 	base_damage      = dmg
+	base_hp          = hp
 	summon_damage_pct = dmg_pct
 	summon_hp_pct    = hp_pct
-	max_hp           = int(hp * hp_pct)
+	max_hp           = int(base_hp * hp_pct)
 	current_hp       = max_hp
+
+func apply_stat_bonuses(dmg_pct: float, hp_pct: float) -> void:
+	var hp_ratio: float = float(current_hp) / float(max_hp) if max_hp > 0 else 1.0
+	summon_damage_pct = dmg_pct
+	summon_hp_pct    = hp_pct
+	max_hp           = int(base_hp * hp_pct)
+	current_hp       = max(1, int(max_hp * hp_ratio))
+
+func set_buff_active(active: bool) -> void:
+	if active:
+		if buff_fx == null:
+			var frames: SpriteFrames = _get_necro_frames()
+			if frames and frames.get_animation_names().has("summon_buff"):
+				buff_fx = AnimatedSprite2D.new()
+				buff_fx.sprite_frames = frames
+				buff_fx.animation = "summon_buff"
+				buff_fx.position = Vector2(0, -20)
+				buff_fx.z_index = 4
+				add_child(buff_fx)
+				buff_fx.play("summon_buff")
+		elif buff_fx:
+			buff_fx.visible = true
+	else:
+		if buff_fx and is_instance_valid(buff_fx):
+			buff_fx.queue_free()
+			buff_fx = null
+
+func set_marked(active: bool) -> void:
+	if active:
+		if mark_fx == null:
+			var frames: SpriteFrames = _get_necro_frames()
+			if frames and frames.get_animation_names().has("mark"):
+				mark_fx = AnimatedSprite2D.new()
+				mark_fx.sprite_frames = frames
+				mark_fx.animation = "mark"
+				mark_fx.position = Vector2(0, -32)
+				mark_fx.z_index = 5
+				add_child(mark_fx)
+				mark_fx.play("mark")
+	else:
+		if mark_fx and is_instance_valid(mark_fx):
+			mark_fx.queue_free()
+			mark_fx = null
 
 func _physics_process(delta: float) -> void:
 	_find_target()
@@ -87,3 +137,13 @@ func take_damage(amount: int) -> void:
 	current_hp -= amount
 	if current_hp <= 0:
 		queue_free()
+
+func _get_necro_frames() -> SpriteFrames:
+	if _necro_frames != null:
+		return _necro_frames
+	var inst := NECRO_SCENE.instantiate()
+	var sprite := inst.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite:
+		_necro_frames = sprite.sprite_frames
+	inst.free()
+	return _necro_frames

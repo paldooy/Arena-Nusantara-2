@@ -1,14 +1,16 @@
 extends CharacterBody2D
 
 # ============================================================
-# player_berserker.gd  [REVISI — baca stat dinamis]
-# Speed dan CD dibaca dari stat_system tiap frame.
+# player_berserker.gd  [REVISI v2]
+# - Fix error blood_aura animation tidak ada → cek dulu exists
+# - Skill visual area untuk semua skill
+# - Animasi skill: spin, ground_smash (blood_aura hanya di aura_fx)
 # ============================================================
 
 signal request_passive_summon()
 
 const ATTACK_RANGE:    float = 50.0
-const BASE_INTERVAL:   float = 0.65   # interval dasar basic attack
+const BASE_INTERVAL:   float = 0.65
 
 var class_system:     Node  = null
 var skill_system:     Node  = null
@@ -32,7 +34,6 @@ var blood_aura_timer:  float = 0.0
 
 func _ready() -> void:
 	add_to_group("player")
-	# Layer 1 = Player, mask 1|2|4 agar bisa collide dengan semua enemy
 	collision_layer = 1
 	collision_mask  = 1 | 2 | 4
 	anim.animation_finished.connect(_on_anim_finished)
@@ -50,7 +51,6 @@ func _physics_process(_delta: float) -> void:
 		Input.get_axis("move_left",  "move_right"),
 		Input.get_axis("move_up",    "move_down")
 	).normalized()
-	# Baca move_speed dari stat_system secara dinamis
 	var spd: float = class_system.stat_system.get_move_speed() if class_system else 145.0
 	velocity = dir * spd
 	move_and_slide()
@@ -102,13 +102,11 @@ func _use_skill_slot(slot_index: int) -> void:
 
 func _execute_skill(skill_id: String) -> void:
 	var data: Dictionary = skill_system.get_skill_data(skill_id)
-	# Extract animation name dari skill_id (buang prefix "berserker_")
 	var anim_name: String = skill_id.trim_prefix("berserker_")
-	# Terapkan CD reduction dari stat
-	var cd_mult: float = class_system.stat_system.get_cd_multiplier() if class_system else 1.0
 
 	match skill_id:
 		"berserker_spin":
+			# Animasi: spin
 			_is_lock_and_play(anim_name)
 			var radius: float = 80.0
 			attack_area.show_circle(radius, Color(1.0, 0.20, 0.10, 0.22), 0.5)
@@ -117,7 +115,6 @@ func _execute_skill(skill_id: String) -> void:
 				class_system.stat_system.stats,
 				global_position, radius, enemies_in_scene, data
 			)
-			# Apply lifesteal for total damage
 			var ls: float = class_system.stat_system.get_stat("lifesteal")
 			if ls > 0.0 and total_dmg > 0:
 				damage_system.apply_lifesteal(self, total_dmg, ls)
@@ -125,22 +122,37 @@ func _execute_skill(skill_id: String) -> void:
 			_unlock_anim_if(anim_name)
 
 		"berserker_blood_aura":
-			_is_lock_and_play(anim_name)
-			# Remove old buff if already active, then apply new one (prevents stacking)
+			# Tidak ada animasi "blood_aura" di SpriteFrames utama,
+			# efek visual hanya dari aura_fx node terpisah.
+			# Jika suatu saat animasi ditambahkan, baris ini akan memakainya.
+			if anim.sprite_frames.get_animation_names().has(anim_name):
+				_is_lock_and_play(anim_name)
+
 			if blood_aura_active:
 				class_system.stat_system.remove_blood_aura()
 			blood_aura_timer  = data.get("buff_duration", 6.0)
 			blood_aura_active = true
 			class_system.stat_system.apply_blood_aura(blood_aura_timer)
+
+			# Tampilkan efek aura di node Effects/Aura
 			if aura_fx:
 				aura_fx.visible = true
-				aura_fx.play("blood_aura")
+				# Coba "aura" dulu (nama di .tscn), fallback ke nama lain
+				if aura_fx.sprite_frames.get_animation_names().has("aura"):
+					aura_fx.play("aura")
+				elif aura_fx.sprite_frames.get_animation_names().has("blood_aura"):
+					aura_fx.play("blood_aura")
+
+			# Visual area lingkaran aura selama durasi buff
 			attack_area.show_circle(55.0, Color(1.0, 0.05, 0.05, 0.14),
 				data.get("buff_duration", 6.0))
-			await anim.animation_finished
-			_unlock_anim_if(anim_name)
+
+			if anim.sprite_frames.get_animation_names().has(anim_name):
+				await anim.animation_finished
+				_unlock_anim_if(anim_name)
 
 		"berserker_ground_smash":
+			# Animasi: ground_smash
 			_is_lock_and_play(anim_name)
 			var smash_r: float = 100.0
 			attack_area.show_circle(smash_r, Color(1.0, 0.30, 0.0, 0.22), 0.5)
@@ -149,7 +161,6 @@ func _execute_skill(skill_id: String) -> void:
 				class_system.stat_system.stats,
 				global_position, smash_r, enemies_in_scene, data
 			)
-			# Apply lifesteal for total damage
 			var ls: float = class_system.stat_system.get_stat("lifesteal")
 			if ls > 0.0 and total_dmg > 0:
 				damage_system.apply_lifesteal(self, total_dmg, ls)
@@ -160,7 +171,6 @@ func _execute_skill(skill_id: String) -> void:
 						enemy.apply_stun(data.get("stun_duration", 1.5))
 			await anim.animation_finished
 			_unlock_anim_if(anim_name)
-
 
 # ─── TIMERS ────────────────────────────────────────────────
 func _tick_timers(delta: float) -> void:

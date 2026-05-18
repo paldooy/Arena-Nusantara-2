@@ -23,11 +23,11 @@ func _ready() -> void:
 func _do_attack() -> void:
 	if is_dying: return   # ← guard tambahan
 	anim_sprite.play("attack")
-	if player and is_instance_valid(player):
-		_fire_projectile(player.global_position)
+	if target and is_instance_valid(target):
+		_fire_projectile(target.global_position, target, is_ally)
 
 # ─── TEMBAK BOLA API ────────────────────────────────────────
-func _fire_projectile(target_world_pos: Vector2) -> void:
+func _fire_projectile(target_world_pos: Vector2, target_ref: Node, owner_is_ally: bool) -> void:
 	var proj := _FireBall.new()
 	proj.global_position  = global_position
 	proj.target_pos       = target_world_pos
@@ -36,7 +36,8 @@ func _fire_projectile(target_world_pos: Vector2) -> void:
 	proj.zone_duration    = FIRE_ZONE_DURATION
 	proj.zone_radius      = FIRE_ZONE_RADIUS
 	proj.zone_dmg_tick    = FIRE_ZONE_DAMAGE_TICK
-	proj.player_ref       = player
+	proj.target_ref       = target_ref
+	proj.owner_is_ally    = owner_is_ally
 	get_tree().current_scene.add_child(proj)
 
 # ─── BOLA API ──────────────────────────────────────────────
@@ -47,7 +48,8 @@ class _FireBall extends Node2D:
 	var zone_duration: float   = 3.0
 	var zone_radius:   float   = 40.0
 	var zone_dmg_tick: float   = 0.5
-	var player_ref:    Node    = null
+	var target_ref:    Node    = null
+	var owner_is_ally: bool    = false
 	var _exploded:     bool    = false
 
 	var _ball_rect: ColorRect = null
@@ -76,9 +78,9 @@ class _FireBall extends Node2D:
 			_explode(global_position)
 			return
 
-		if player_ref and is_instance_valid(player_ref):
-			var to_player: float = global_position.distance_to(player_ref.global_position)
-			if to_player < 18.0:
+		if target_ref and is_instance_valid(target_ref):
+			var to_target: float = global_position.distance_to(target_ref.global_position)
+			if to_target < 18.0:
 				_explode(global_position)
 				return
 
@@ -96,7 +98,9 @@ class _FireBall extends Node2D:
 		zone.duration        = zone_duration
 		zone.radius          = zone_radius
 		zone.dmg_tick        = zone_dmg_tick
-		zone.player_ref      = player_ref
+		var safe_target: Node = target_ref if is_instance_valid(target_ref) else null
+		zone.target_ref      = safe_target
+		zone.owner_is_ally   = owner_is_ally
 		get_tree().current_scene.add_child(zone)
 
 		queue_free()
@@ -107,7 +111,8 @@ class _FireZone extends Node2D:
 	var duration:   float = 3.0
 	var radius:     float = 40.0
 	var dmg_tick:   float = 1
-	var player_ref: Node  = null
+	var target_ref: Node  = null
+	var owner_is_ally: bool = false
 
 	var _elapsed:    float = 0.0
 	var _tick_timer: float = 0.0
@@ -144,12 +149,23 @@ class _FireZone extends Node2D:
 			queue_free()
 
 	func _deal_damage() -> void:
-		if player_ref and is_instance_valid(player_ref):
-			if global_position.distance_to(player_ref.global_position) <= radius:
-				if player_ref.has_method("take_damage"):
-					player_ref.take_damage(damage)
-		var summons = get_tree().get_nodes_in_group("summons")
-		for s in summons:
-			if is_instance_valid(s) and global_position.distance_to(s.global_position) <= radius:
-				if s.has_method("take_damage"):
-					s.take_damage(int(damage * 0.5))
+		if target_ref and is_instance_valid(target_ref):
+			if global_position.distance_to(target_ref.global_position) <= radius:
+				if target_ref.has_method("take_damage"):
+					target_ref.take_damage(damage)
+		if owner_is_ally:
+			var enemies = get_tree().get_nodes_in_group("enemies")
+			for e in enemies:
+				if not is_instance_valid(e) or e == target_ref:
+					continue
+				if global_position.distance_to(e.global_position) <= radius:
+					if e.has_method("take_damage"):
+						e.take_damage(int(damage * 0.5))
+		else:
+			var summons = get_tree().get_nodes_in_group("summons")
+			for s in summons:
+				if not is_instance_valid(s) or s == target_ref:
+					continue
+				if global_position.distance_to(s.global_position) <= radius:
+					if s.has_method("take_damage"):
+						s.take_damage(int(damage * 0.5))

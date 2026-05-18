@@ -17,6 +17,9 @@ extends Node2D
 const SCENE_BERSERKER   = preload("res://scenes/characters/Berserker.tscn")
 const SCENE_NECROMANCER = preload("res://scenes/characters/Necromancer.tscn")
 const SCENE_SUMMON_UNIT = preload("res://scenes/characters/SummonUnit.tscn")
+const SCENE_POCONG      = preload("res://scenes/characters/Pocong.tscn")
+const SCENE_BANASPATI   = preload("res://scenes/characters/Banaspati.tscn")
+const SCENE_GENDERUWO   = preload("res://scenes/characters/Genderuwo.tscn")
 
 const BASE_SUMMON_DAMAGE: int = 12
 const BASE_SUMMON_HP:     int = 60
@@ -43,7 +46,7 @@ var summon_list:  Array = []
 var _pending_skill_choices: Array = []
 var _upgrade_popup_open:    bool  = false
 
-signal request_summon_from_death(spawn_pos: Vector2)
+signal request_convert_from_death(enemy_type: int, spawn_pos: Vector2, stats: Dictionary)
 
 func _ready() -> void:
 	# ── Step 1: Spawn player ────────────────────────────────
@@ -79,7 +82,7 @@ func _ready() -> void:
 
 	# Sinyal dari player
 	player_node.request_passive_summon.connect(_on_passive_summon_request)
-	request_summon_from_death.connect(_on_summon_from_death)
+	request_convert_from_death.connect(_on_convert_from_death)
 
 	# ── Step 4: Init class SETELAH semua sinyal terpasang ───
 	class_system.init_class(GameManager.selected_class)
@@ -149,8 +152,8 @@ func _on_enemy_killed(exp_reward: int) -> void:
 func _on_passive_summon_request() -> void:
 	_try_spawn_summon(player_node.global_position + Vector2(60, 0))
 
-func _on_summon_from_death(spawn_pos: Vector2) -> void:
-	_try_spawn_summon(spawn_pos)
+func _on_convert_from_death(enemy_type: int, spawn_pos: Vector2, stats: Dictionary) -> void:
+	_spawn_marked_follower(enemy_type, spawn_pos, stats)
 
 func _try_spawn_summon(pos: Vector2) -> void:
 	var limit: int = stat_system.get_summon_limit()
@@ -167,3 +170,30 @@ func _try_spawn_summon(pos: Vector2) -> void:
 		summon.setup(BASE_SUMMON_DAMAGE, BASE_SUMMON_HP, dmg_pct, hp_pct)
 	summon.owner_player = player_node
 	summon_list.append(summon)
+
+func _spawn_marked_follower(enemy_type: int, pos: Vector2, stats: Dictionary) -> void:
+	if enemy_type == enemy_balance.EnemyType.LEAK:
+		return
+	var scene: PackedScene = _get_enemy_scene(enemy_type)
+	if scene == null:
+		return
+	var follower = scene.instantiate()
+	follower.position = pos
+	y_sort.add_child(follower)
+	if follower.has_method("setup"):
+		follower.setup(stats, enemy_type)
+	if follower.has_method("set_faction_ally"):
+		follower.set_faction_ally()
+	if follower.has_method("apply_mark"):
+		follower.apply_mark(0.0)
+
+func _get_enemy_scene(enemy_type: int) -> PackedScene:
+	match enemy_type:
+		enemy_balance.EnemyType.POCONG:
+			return SCENE_POCONG
+		enemy_balance.EnemyType.BANASPATI:
+			return SCENE_BANASPATI
+		enemy_balance.EnemyType.GENDERUWO:
+			return SCENE_GENDERUWO
+		_:
+			return null

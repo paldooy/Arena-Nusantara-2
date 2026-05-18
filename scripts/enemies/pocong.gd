@@ -23,9 +23,9 @@ func _do_attack() -> void:
 		_in_attack_anim = false
 		return
 
-	if player and is_instance_valid(player) and player.has_method("take_damage"):
-		if global_position.distance_to(player.global_position) <= attack_range * 1.3:
-			player.take_damage(damage)
+	if target and is_instance_valid(target) and target.has_method("take_damage"):
+		if global_position.distance_to(target.global_position) <= attack_range * 1.3:
+			target.take_damage(damage)
 
 	# Tunggu animasi selesai sebelum bisa attack lagi
 	await anim_sprite.animation_finished

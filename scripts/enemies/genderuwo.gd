@@ -18,14 +18,17 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dying: return
 	_tick_stun(delta)
-	if is_stunned or player == null: return
+	if is_stunned: return
 
-	var dist: float = global_position.distance_to(player.global_position)
+	target = _find_target()
+	if target == null: return
+
+	var dist: float = global_position.distance_to(target.global_position)
 
 	if dist > attack_range:
 		if attack_cooldown < 0.5:
 			attack_cooldown = 0.5
-		var dir: Vector2 = (player.global_position - global_position).normalized()
+		var dir: Vector2 = (target.global_position - global_position).normalized()
 		velocity = dir * move_speed
 		move_and_slide()
 		anim_sprite.play("walk")
@@ -51,9 +54,9 @@ func _do_attack() -> void:
 		_in_attack_anim = false
 		return
 
-	if player and is_instance_valid(player) and player.has_method("take_damage"):
-		if global_position.distance_to(player.global_position) <= attack_range * 1.3:
-			player.take_damage(damage)
+	if target and is_instance_valid(target) and target.has_method("take_damage"):
+		if global_position.distance_to(target.global_position) <= attack_range * 1.3:
+			target.take_damage(damage)
 
 	await anim_sprite.animation_finished
 	_in_attack_anim = false

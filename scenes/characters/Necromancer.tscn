@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://bqhf34qq13g72" path="res://scripts/player/player_necromancer.gd" id="1"]
 [ext_resource type="Script" uid="uid://cnra16d8c288i" path="res://scripts/attack_area.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://kr6nw2hkw538" path="res://assets/Nusantara/Player/Dukun/ATTACK 2.png" id="2_8j8n2"]
+[ext_resource type="Texture2D" uid="uid://b7w1b1xonqxh3" path="res://assets/Nusantara/Player/Dukun/ATTACK SKILL.png" id="2_attack_skill"]
+[ext_resource type="Texture2D" uid="uid://dvahxqxmbeseg" path="res://assets/Nusantara/Player/Dukun/SKILL 2.png" id="3_2l37w"]
 [ext_resource type="Texture2D" uid="uid://doi7pbh8ebhvg" path="res://assets/Nusantara/Player/Dukun/DEAD 2.png" id="3_wiwr2"]
 [ext_resource type="Texture2D" uid="uid://d3mv3jgpty4ff" path="res://assets/Nusantara/Player/Dukun/DAMAGED 2.png" id="4_g7gyx"]
 [ext_resource type="Texture2D" uid="uid://lkuq7lr01joh" path="res://assets/Nusantara/Player/Dukun/IDLE 2.png" id="5_2l37w"]
@@ -11,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://o1etnwx4amj1" path="res://assets/Nusantara/Player/Dukun/SKILL 2 (BUFF).png" id="7_g7gyx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jrknr"]
+radius = 26.0
+height = 60.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hhonw"]
 atlas = ExtResource("2_8j8n2")
@@ -31,6 +35,38 @@ region = Rect2(193, 0, 62, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_8ggef"]
 atlas = ExtResource("2_8j8n2")
 region = Rect2(255, 0, 62, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_attack_skill_0"]
+atlas = ExtResource("2_attack_skill")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_attack_skill_1"]
+atlas = ExtResource("2_attack_skill")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_attack_skill_2"]
+atlas = ExtResource("2_attack_skill")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_attack_skill_3"]
+atlas = ExtResource("2_attack_skill")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t0p36"]
+atlas = ExtResource("3_2l37w")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_edcwr"]
+atlas = ExtResource("3_2l37w")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ybbc"]
+atlas = ExtResource("3_2l37w")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1st3s"]
+atlas = ExtResource("3_2l37w")
+region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3gbla"]
 atlas = ExtResource("3_wiwr2")
@@ -119,6 +155,40 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 0.25,
+"texture": SubResource("AtlasTexture_attack_skill_0")
+}, {
+"duration": 0.25,
+"texture": SubResource("AtlasTexture_attack_skill_1")
+}, {
+"duration": 0.25,
+"texture": SubResource("AtlasTexture_attack_skill_2")
+}, {
+"duration": 0.25,
+"texture": SubResource("AtlasTexture_attack_skill_3")
+}],
+"loop": true,
+"name": &"attack_particle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.8,
+"texture": SubResource("AtlasTexture_t0p36")
+}, {
+"duration": 0.8,
+"texture": SubResource("AtlasTexture_edcwr")
+}, {
+"duration": 0.8,
+"texture": SubResource("AtlasTexture_0ybbc")
+}, {
+"duration": 0.8,
+"texture": SubResource("AtlasTexture_1st3s")
+}],
+"loop": false,
+"name": &"dark_circle",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 1.5,
 "texture": SubResource("AtlasTexture_3gbla")
 }, {
@@ -201,17 +271,18 @@ animations = [{
 script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=841952885]
+position = Vector2(-1, -24)
 shape = SubResource("CapsuleShape2D_jrknr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=276336140]
+position = Vector2(0, -20)
 sprite_frames = SubResource("SpriteFrames_2l37w")
-animation = &"summon_buff"
+animation = &"attack_particle"
 
 [node name="AttackArea" type="Node2D" parent="." unique_id=1338450909]
 script = ExtResource("2")
 
 [node name="Polygon2D" type="Polygon2D" parent="AttackArea" unique_id=1046064324]
-visible = false
 color = Color(0.6, 0.1, 1, 0.28)
 
 [node name="CirclePolygon" type="Polygon2D" parent="AttackArea" unique_id=1480803932]
