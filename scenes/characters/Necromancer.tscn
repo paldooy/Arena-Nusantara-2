@@ -204,8 +204,9 @@ script = ExtResource("1")
 shape = SubResource("CapsuleShape2D_jrknr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=276336140]
+clip_children = 2
 sprite_frames = SubResource("SpriteFrames_2l37w")
-animation = &"summon_buff"
+animation = &"attack"
 
 [node name="AttackArea" type="Node2D" parent="." unique_id=1338450909]
 script = ExtResource("2")
