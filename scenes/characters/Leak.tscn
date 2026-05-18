@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://dpvodn2hd4ubm" path="res://assets/Nusantara/Enemy/Barong/Walk.png" id="3_tagmf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c7jju"]
-radius = 17.0
-height = 34.0
+radius = 48.0
+height = 120.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s1mqv"]
 atlas = ExtResource("2_xgugw")
@@ -133,13 +133,20 @@ animations = [{
 script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=968810587]
+position = Vector2(0, -11)
+rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_c7jju")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=332411079]
+position = Vector2(1, -16)
+sprite_frames = SubResource("SpriteFrames_kvw01")
+animation = &"idle"
+
+[node name="AttackFX" type="AnimatedSprite2D" parent="." unique_id=338928176]
+visible = false
+z_index = 2
 sprite_frames = SubResource("SpriteFrames_kvw01")
 animation = &"attack"
-frame = 5
-frame_progress = 1.0
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=1418001818]
 custom_minimum_size = Vector2(72, 8)

@@ -46,7 +46,7 @@ const ENEMY_BASE: Dictionary = {
 	},
 	EnemyType.LEAK: {
 		"hp": 2500, "damage": 40, "exp": 0,
-		"speed": 70.0, "attack_range": 85.0,
+		"speed": 70.0, "attack_range": 360.0,
 		"is_ranged": false,
 	},
 }

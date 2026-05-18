@@ -10,9 +10,12 @@ const AOE_INTERVAL: float = 8.0
 const AOE_RADIUS:   float = 120.0
 const AOE_DMG_MULT: float = 1.5
 const PROJECTILE_SPEED: float = 220.0
+const PROJECTILE_HIT_RADIUS: float = 70.0
 
 var aoe_timer:         float = AOE_INTERVAL
 var phase2_triggered:  bool  = false
+
+@onready var attack_fx_sprite: AnimatedSprite2D = $AttackFX
 
 func _ready() -> void:
 	super._ready()
@@ -34,13 +37,22 @@ func _physics_process(delta: float) -> void:
 func _do_attack() -> void:
 	if is_dying or _in_attack_anim: return
 	_in_attack_anim = true
-	anim_sprite.play("attack")
+	var attack_left: bool = false
 	if target and is_instance_valid(target):
-		_fire_projectile(target.global_position, target, is_ally)
-	await anim_sprite.animation_finished
+		attack_left = target.global_position.x < global_position.x
+	if anim_sprite:
+		anim_sprite.play("idle")
+		anim_sprite.flip_h = attack_left
+	if attack_fx_sprite:
+		attack_fx_sprite.flip_h = attack_left
+		attack_fx_sprite.play("attack")
+	if target and is_instance_valid(target):
+		_fire_projectile(target.global_position, target, is_ally, attack_left)
+	if attack_fx_sprite:
+		await attack_fx_sprite.animation_finished
 	_in_attack_anim = false
 
-func _fire_projectile(target_world_pos: Vector2, target_ref: Node, owner_is_ally: bool) -> void:
+func _fire_projectile(target_world_pos: Vector2, target_ref: Node, owner_is_ally: bool, flip_left: bool) -> void:
 	var proj := _LeakProjectile.new()
 	proj.global_position = global_position
 	proj.target_pos = target_world_pos
@@ -48,6 +60,8 @@ func _fire_projectile(target_world_pos: Vector2, target_ref: Node, owner_is_ally
 	proj.damage = damage
 	proj.target_ref = target_ref if is_instance_valid(target_ref) else null
 	proj.owner_is_ally = owner_is_ally
+	proj.sprite_frames = attack_fx_sprite.sprite_frames if attack_fx_sprite else null
+	proj.flip_h = flip_left
 	get_tree().current_scene.add_child(proj)
 
 class _LeakProjectile extends Node2D:
@@ -56,20 +70,31 @@ class _LeakProjectile extends Node2D:
 	var damage: int = 20
 	var target_ref: Node = null
 	var owner_is_ally: bool = false
+	var sprite_frames: SpriteFrames = null
+	var flip_h: bool = false
 
 	func _ready() -> void:
-		var core := ColorRect.new()
-		core.size = Vector2(14, 14)
-		core.position = Vector2(-7, -7)
-		core.color = Color(1.0, 0.35, 0.1)
-		add_child(core)
+		if sprite_frames:
+			var fx := AnimatedSprite2D.new()
+			fx.sprite_frames = sprite_frames
+			fx.animation = "attack"
+			fx.z_index = 2
+			fx.flip_h = flip_h
+			add_child(fx)
+			fx.play("attack")
+		else:
+			var core := ColorRect.new()
+			core.size = Vector2(14, 14)
+			core.position = Vector2(-7, -7)
+			core.color = Color(1.0, 0.35, 0.1)
+			add_child(core)
 
-		var glow := ColorRect.new()
-		glow.size = Vector2(26, 26)
-		glow.position = Vector2(-13, -13)
-		glow.color = Color(1.0, 0.2, 0.0, 0.25)
-		add_child(glow)
-		move_child(glow, 0)
+			var glow := ColorRect.new()
+			glow.size = Vector2(26, 26)
+			glow.position = Vector2(-13, -13)
+			glow.color = Color(1.0, 0.2, 0.0, 0.25)
+			add_child(glow)
+			move_child(glow, 0)
 
 	func _process(delta: float) -> void:
 		var dir: Vector2 = (target_pos - global_position)
@@ -82,8 +107,9 @@ class _LeakProjectile extends Node2D:
 
 	func _apply_hit() -> void:
 		if target_ref and is_instance_valid(target_ref):
-			if target_ref.has_method("take_damage"):
-				target_ref.take_damage(damage)
+			if global_position.distance_to(target_ref.global_position) <= PROJECTILE_HIT_RADIUS:
+				if target_ref.has_method("take_damage"):
+					target_ref.take_damage(damage)
 
 func _tick_aoe(delta: float) -> void:
 	if is_dying or is_stunned or target == null: return

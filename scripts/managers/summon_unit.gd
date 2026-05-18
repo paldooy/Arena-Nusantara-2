@@ -6,11 +6,11 @@ extends CharacterBody2D
 # ============================================================
 
 var base_damage: int = 12
-var base_hp:     int = 60
+var base_hp:     int = 30
 var move_speed: float = 90.0
 var attack_range: float = 50.0
-var current_hp: int = 60
-var max_hp: int = 60
+var current_hp: int = 30
+var max_hp: int = 30
 var attack_interval: float = 1.5
 
 var summon_damage_pct: float = 1.0  # dari stat_system
