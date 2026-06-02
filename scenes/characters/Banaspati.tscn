@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://ddr4j3br6k35p" path="res://assets/Nusantara/Enemy/Banaspati/walk.png" id="4_cc0ew"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x5nwk"]
+radius = 16.34
+height = 41.92
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eiq48"]
 atlas = ExtResource("2_umvvw")
@@ -116,7 +118,7 @@ shape = SubResource("CapsuleShape2D_x5nwk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1710592462]
 sprite_frames = SubResource("SpriteFrames_sp4sf")
-animation = &"attack"
+animation = &"walk"
 speed_scale = 1.5
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=179794743]

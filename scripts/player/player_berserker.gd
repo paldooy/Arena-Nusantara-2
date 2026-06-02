@@ -79,8 +79,8 @@ func _do_basic_attack() -> void:
 		if not is_instance_valid(enemy): continue
 		var diff: Vector2 = enemy.global_position - global_position
 		if diff.length() > ATTACK_RANGE: continue
-		if facing_right  and diff.x < -8.0: continue
-		if not facing_right and diff.x > 8.0: continue
+		#if facing_right  and diff.x < -8.0: continue    <-- bikin attacknya jadi ga sesuai attack area, gabisa hit banyak sekaligus
+		#if not facing_right and diff.x > 8.0: continue
 		var dmg: int = damage_system.apply_damage(
 			class_system.stat_system.stats, enemy, {},
 			enemy.get("defense") if enemy.get("defense") != null else 0

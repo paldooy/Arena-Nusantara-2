@@ -145,6 +145,11 @@ func _launch_attack_particle(target: Node, splash_r: float) -> void:
 		proj.play("attack_particle")
 	proj.global_position = global_position
 	proj.z_index = 2
+	
+	# Rotasi proyektil menghadap target
+	var direction: Vector2 = (target.global_position - global_position).normalized()
+	proj.rotation = direction.angle()
+	
 	get_parent().add_child(proj)
 
 	# Gerakkan proyektil menuju target secara smooth
@@ -165,8 +170,10 @@ func _launch_attack_particle(target: Node, splash_r: float) -> void:
 		proj.global_position = start_pos.lerp(target_node_ref.global_position, t)
 		await get_tree().process_frame
 
-	# Proyektil tiba — deal damage
+	# Proyektil tiba — play impact animation
 	if is_instance_valid(proj):
+		proj.play("attack_particle_impact")
+		await proj.animation_finished
 		proj.queue_free()
 	if not is_instance_valid(target_node_ref): return
 
@@ -237,7 +244,12 @@ func _execute_skill(skill_id: String) -> void:
 
 		"necromancer_dark_circle":
 			var radius: float = data.get("radius", 90.0)
-			_spawn_skill_fx("dark_circle", cursor_pos, 4, 0.9)
+
+			for enemy in enemies_in_scene:
+				if not is_instance_valid(enemy): continue
+				if cursor_pos.distance_to(enemy.global_position) <= radius:
+					_spawn_skill_fx("dark_circle", enemy.global_position, 4, 0.9)
+
 			# Area visual meledak di posisi kursor
 			attack_area.show_circle_at(cursor_pos, radius, Color(0.40, 0.0, 0.80, 0.30), 0.40)
 			await get_tree().create_timer(0.20).timeout

@@ -21,8 +21,8 @@ enum CharacterClass { BERSERKER, NECROMANCER }
 
 # ─── BASE STAT LEVEL 1 ─────────────────────────────────────
 const BERSERKER_BASE: Dictionary = {
-	"hp":           70,     # sangat rendah — naik lewat upgrade
-	"damage":        25,     # rendah — naik lewat upgrade attack%
+	"hp":           7000,     # sangat rendah — naik lewat upgrade
+	"damage":        500,     # rendah — naik lewat upgrade attack%
 	"attack_speed":  1.3,
 	"crit_chance":   0.1,  # 2% base
 	"crit_mult":     1.4,   # 140% base
@@ -34,8 +34,8 @@ const BERSERKER_BASE: Dictionary = {
 }
 
 const NECROMANCER_BASE: Dictionary = {
-	"hp":                70,    # sangat rendah
-	"damage":             20,    # sangat rendah
+	"hp":                7000,    # sangat rendah
+	"damage":             10,    # sangat rendah
 	"attack_speed":       1.1,
 	"crit_chance":        0.02,
 	"crit_mult":          1.3,
@@ -54,13 +54,13 @@ const NECROMANCER_BASE: Dictionary = {
 # ─── GROWTH PER LEVEL (auto) ───────────────────────────────
 # Sedikit saja — sebagian besar naik dari upgrade manual
 const BERSERKER_GROWTH: Dictionary = {
-	"hp":        8,      # +8 per level → lv15 = 70 + 8×14 = 182
+	"hp":        9999,      # +8 per level → lv15 = 70 + 8×14 = 182
 	"damage":    1,      # +1 per level → lv15 = 7 + 14 = 21
 	"defense":   0,      # tidak naik otomatis, hanya dari upgrade
 }
 
 const NECROMANCER_GROWTH: Dictionary = {
-	"hp":               6,     # +6 per level → lv15 = 70 + 6×14 = 154
+	"hp":               9999,     # +6 per level → lv15 = 70 + 6×14 = 154
 	"damage":           1,     # +1 per level
 	"summon_damage_pct":0.01,  # +1% per level
 	"summon_hp_pct":    0.01,
