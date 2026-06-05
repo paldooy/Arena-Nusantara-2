@@ -2,51 +2,232 @@
 
 [ext_resource type="Script" uid="uid://c14hyafkjrxi1" path="res://scripts/ui/main_menu.gd" id="1"]
 
-[node name="MainMenu" type="Control" unique_id=499040742]
+[sub_resource type="SystemFont" id="SystemFont_yqorp"]
+
+[node name="MainMenu" type="Control" unique_id=1096423457]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1")
 
-[node name="BgColor" type="ColorRect" parent="." unique_id=787194633]
+[node name="BgFill" type="ColorRect" parent="." unique_id=1524795129]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.07, 0.07, 0.12, 1)
+color = Color(0.055, 0.035, 0.09, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1410027586]
+[node name="BgVignette" type="ColorRect" parent="." unique_id=1212805944]
 layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.35)
+
+[node name="BgAccentTop" type="ColorRect" parent="." unique_id=1142475280]
+layout_mode = 0
+anchor_right = 1.0
+offset_bottom = 260.0
+color = Color(0.1, 0.02, 0.2, 0.45)
+
+[node name="LineGoldTop" type="ColorRect" parent="." unique_id=1885411762]
+layout_mode = 0
+anchor_right = 1.0
+offset_bottom = 3.0
+color = Color(0.78, 0.58, 0.08, 1)
+
+[node name="LineGoldBottom" type="ColorRect" parent="." unique_id=1840877386]
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -3.0
+color = Color(0.78, 0.58, 0.08, 1)
+
+[node name="LineGoldTop2" type="ColorRect" parent="." unique_id=1318077692]
+layout_mode = 0
+anchor_right = 1.0
+offset_top = 6.0
+offset_bottom = 8.0
+color = Color(0.78, 0.58, 0.08, 0.3)
+
+[node name="LineGoldBottom2" type="ColorRect" parent="." unique_id=1481985778]
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_bottom = -6.0
+color = Color(0.78, 0.58, 0.08, 0.3)
+
+[node name="CornerTL" type="Label" parent="." unique_id=1703203826]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 14.0
+offset_right = 60.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 0.55)
+theme_override_font_sizes/font_size = 24
+text = "✦"
+
+[node name="CornerTR" type="Label" parent="." unique_id=1922987334]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -56.0
+offset_top = 14.0
+offset_right = -18.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 0.55)
+theme_override_font_sizes/font_size = 24
+text = "✦"
+horizontal_alignment = 2
+
+[node name="CornerBL" type="Label" parent="." unique_id=471930665]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = -50.0
+offset_right = 60.0
+offset_bottom = -14.0
+theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 0.55)
+theme_override_font_sizes/font_size = 24
+text = "✦"
+
+[node name="CornerBR" type="Label" parent="." unique_id=865601566]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -56.0
+offset_top = -50.0
+offset_right = -18.0
+offset_bottom = -14.0
+theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 0.55)
+theme_override_font_sizes/font_size = 24
+text = "✦"
+horizontal_alignment = 2
+
+[node name="TitleArea" type="Control" parent="." unique_id=1801291882]
+anchors_preset = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -340.0
+offset_top = 60.0
+offset_right = 340.0
+offset_bottom = 200.0
+
+[node name="LblTitle" type="Label" parent="TitleArea" unique_id=23287751]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 38.0
+offset_right = 1.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.2, 1)
+theme_override_colors/font_shadow_color = Color(0.38, 0, 0.6, 0.85)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = SubResource("SystemFont_yqorp")
+theme_override_font_sizes/font_size = 52
+text = "ARENA NUSANTARA"
+horizontal_alignment = 1
+
+[node name="LblSub" type="Label" parent="." unique_id=354925166]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -241.0
+offset_top = 192.0
+offset_right = 239.0
+offset_bottom = 220.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.72, 0.6, 0.9, 0.8)
+theme_override_font_sizes/font_size = 14
+text = "~ Bertahan dari serangan hantu nusantara ~"
+horizontal_alignment = 1
+
+[node name="DividerLeft" type="ColorRect" parent="." unique_id=1487187698]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.0
+offset_top = 236.0
+offset_right = -40.0
+offset_bottom = 239.0
+color = Color(0.78, 0.58, 0.08, 0.5)
+
+[node name="DividerDot" type="Label" parent="." unique_id=856230186]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -12.0
+offset_top = 228.0
+offset_right = 12.0
+offset_bottom = 248.0
+theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 0.8)
+theme_override_font_sizes/font_size = 12
+text = "◆"
+horizontal_alignment = 1
+
+[node name="DividerRight" type="ColorRect" parent="." unique_id=696409850]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 40.0
+offset_top = 236.0
+offset_right = 160.0
+offset_bottom = 239.0
+color = Color(0.78, 0.58, 0.08, 0.5)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=805584205]
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -140.0
-offset_right = 150.0
-offset_bottom = 140.0
-theme_override_constants/separation = 20
+offset_left = -160.0
+offset_top = -40.0
+offset_right = 160.0
+offset_bottom = 238.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="LblTitle" type="Label" parent="VBoxContainer" unique_id=1141970577]
+[node name="VBox" type="VBoxContainer" parent="Center" unique_id=1391277140]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "JAGOAN NUSANTARA"
+theme_override_constants/separation = 18
+
+[node name="BtnPlay" type="Button" parent="Center/VBox" unique_id=1205557546]
+custom_minimum_size = Vector2(320, 70)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9490196, 0.9490196, 0.9490196, 1)
+theme_override_colors/font_hover_color = Color(0.04, 0.01, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "▶    MULAI PETUALANGAN"
+
+[node name="BtnCredit" type="Button" parent="Center/VBox" unique_id=466975442]
+custom_minimum_size = Vector2(320, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9, 0.78, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "✦    KREDIT"
+
+[node name="LblVersion" type="Label" parent="." unique_id=1282163654]
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -26.0
+theme_override_colors/font_color = Color(0.45, 0.4, 0.52, 0.55)
+theme_override_font_sizes/font_size = 11
+text = "Arena Nusantara  v1.0  —  Tugas Kuliah 2025"
 horizontal_alignment = 1
-
-[node name="LblSubtitle" type="Label" parent="VBoxContainer" unique_id=454319268]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "Pilih Karaktermu"
-horizontal_alignment = 1
-
-[node name="BtnBerserker" type="Button" parent="VBoxContainer" unique_id=412119450]
-custom_minimum_size = Vector2(300, 70)
-layout_mode = 2
-text = "⚔  KSATRIA
-Melee tangguh, lifesteal, AOE smash"
-
-[node name="BtnNecromancer" type="Button" parent="VBoxContainer" unique_id=2060387598]
-custom_minimum_size = Vector2(300, 70)
-layout_mode = 2
-text = "💀  DUKUN
-Summon army, dark circle, soul marka	"
