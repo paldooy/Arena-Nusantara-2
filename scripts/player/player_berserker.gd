@@ -125,7 +125,8 @@ func _execute_skill(skill_id: String) -> void:
 			# Tidak ada animasi "blood_aura" di SpriteFrames utama,
 			# efek visual hanya dari aura_fx node terpisah.
 			# Jika suatu saat animasi ditambahkan, baris ini akan memakainya.
-			if anim.sprite_frames.get_animation_names().has(anim_name):
+			var has_aura_anim: bool = anim.sprite_frames.get_animation_names().has(anim_name) and anim.sprite_frames.get_frame_count(anim_name) > 0
+			if has_aura_anim:
 				_is_lock_and_play(anim_name)
 
 			if blood_aura_active:
@@ -147,7 +148,7 @@ func _execute_skill(skill_id: String) -> void:
 			attack_area.show_circle(55.0, Color(1.0, 0.05, 0.05, 0.14),
 				data.get("buff_duration", 6.0))
 
-			if anim.sprite_frames.get_animation_names().has(anim_name):
+			if has_aura_anim:
 				await anim.animation_finished
 				_unlock_anim_if(anim_name)
 
@@ -227,6 +228,8 @@ func _update_animation(dir: Vector2) -> void:
 
 func _is_lock_and_play(anim_name: String) -> void:
 	if not anim.sprite_frames.get_animation_names().has(anim_name):
+		return
+	if anim.sprite_frames.get_frame_count(anim_name) == 0:
 		return
 	is_anim_locked = true
 	locked_anim = anim_name

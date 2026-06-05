@@ -38,6 +38,7 @@ func _fire_projectile(target_world_pos: Vector2, target_ref: Node, owner_is_ally
 	proj.zone_dmg_tick    = FIRE_ZONE_DAMAGE_TICK
 	proj.target_ref       = target_ref
 	proj.owner_is_ally    = owner_is_ally
+	proj.sprite_frames    = anim_sprite.sprite_frames if anim_sprite else null
 	get_tree().current_scene.add_child(proj)
 
 # ─── BOLA API ──────────────────────────────────────────────
@@ -50,23 +51,36 @@ class _FireBall extends Node2D:
 	var zone_dmg_tick: float   = 0.5
 	var target_ref:    Node    = null
 	var owner_is_ally: bool    = false
+	var sprite_frames: SpriteFrames = null
 	var _exploded:     bool    = false
 
 	var _ball_rect: ColorRect = null
+	var _sprite: AnimatedSprite2D = null
 
 	func _ready() -> void:
-		_ball_rect = ColorRect.new()
-		_ball_rect.size     = Vector2(16, 16)
-		_ball_rect.position = Vector2(-8, -8)
-		_ball_rect.color    = Color(1.0, 0.55, 0.05)
-		add_child(_ball_rect)
+		if sprite_frames and sprite_frames.has_animation("fireball"):
+			_sprite = AnimatedSprite2D.new()
+			_sprite.sprite_frames = sprite_frames
+			_sprite.animation = "fireball"
+			_sprite.z_index = 2
+			add_child(_sprite)
+			_sprite.scale = Vector2(0.25, 0.25)
+			_sprite.play("fireball")
+			var dir := (target_pos - global_position).normalized()
+			_sprite.rotation = dir.angle()
+		else:
+			_ball_rect = ColorRect.new()
+			_ball_rect.size     = Vector2(16, 16)
+			_ball_rect.position = Vector2(-8, -8)
+			_ball_rect.color    = Color(1.0, 0.55, 0.05)
+			add_child(_ball_rect)
 
-		var glow := ColorRect.new()
-		glow.size     = Vector2(28, 28)
-		glow.position = Vector2(-14, -14)
-		glow.color    = Color(1.0, 0.3, 0.0, 0.25)
-		add_child(glow)
-		move_child(glow, 0)
+			var glow := ColorRect.new()
+			glow.size     = Vector2(28, 28)
+			glow.position = Vector2(-14, -14)
+			glow.color    = Color(1.0, 0.3, 0.0, 0.25)
+			add_child(glow)
+			move_child(glow, 0)
 
 	func _process(delta: float) -> void:
 		if _exploded: return
@@ -84,13 +98,17 @@ class _FireBall extends Node2D:
 				_explode(global_position)
 				return
 
-		global_position += dir.normalized() * travel_speed * delta
+		var move_dir := dir.normalized()
+		global_position += move_dir * travel_speed * delta
+		if _sprite:
+			_sprite.rotation = move_dir.angle()
 
 	func _explode(explosion_pos: Vector2) -> void:
 		if _exploded: return
 		_exploded = true
 
 		if _ball_rect: _ball_rect.visible = false
+		if _sprite: _sprite.visible = false
 
 		var zone := _FireZone.new()
 		zone.global_position = explosion_pos

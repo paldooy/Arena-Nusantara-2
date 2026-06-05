@@ -173,26 +173,30 @@ func _launch_attack_particle(target: Node, splash_r: float) -> void:
 	# Proyektil tiba — play impact animation
 	if is_instance_valid(proj):
 		proj.play("attack_particle_impact")
+
+	if is_instance_valid(target_node_ref):
+		var hit_pos: Vector2 = target_node_ref.global_position
+		var dmg: int = damage_system.apply_damage(
+			class_system.stat_system.stats, target_node_ref, {},
+			target_node_ref.get("defense") if target_node_ref.get("defense") != null else 0
+		)
+
+		# Splash di posisi musuh
+		attack_area.show_circle_at(hit_pos, splash_r, Color(0.6, 0.1, 1.0, 0.28), 0.22)
+		for enemy in enemies_in_scene:
+			if not is_instance_valid(enemy) or enemy == target_node_ref: continue
+			if hit_pos.distance_to(enemy.global_position) <= splash_r:
+				damage_system.apply_damage(
+					class_system.stat_system.stats, enemy,
+					{"damage_mult": 0.4},
+					enemy.get("defense") if enemy.get("defense") != null else 0
+				)
+
+	# Tunggu animasi ledakan selesai baru hapus node proyektilnya
+	if is_instance_valid(proj):
 		await proj.animation_finished
-		proj.queue_free()
-	if not is_instance_valid(target_node_ref): return
-
-	var hit_pos: Vector2 = target_node_ref.global_position
-	var dmg: int = damage_system.apply_damage(
-		class_system.stat_system.stats, target_node_ref, {},
-		target_node_ref.get("defense") if target_node_ref.get("defense") != null else 0
-	)
-
-	# Splash di posisi musuh
-	attack_area.show_circle_at(hit_pos, splash_r, Color(0.6, 0.1, 1.0, 0.28), 0.22)
-	for enemy in enemies_in_scene:
-		if not is_instance_valid(enemy) or enemy == target_node_ref: continue
-		if hit_pos.distance_to(enemy.global_position) <= splash_r:
-			damage_system.apply_damage(
-				class_system.stat_system.stats, enemy,
-				{"damage_mult": 0.4},
-				enemy.get("defense") if enemy.get("defense") != null else 0
-			)
+		if is_instance_valid(proj):
+			proj.queue_free()
 
 # ─── SKILL ─────────────────────────────────────────────────
 func _use_skill_slot(slot_index: int) -> void:
@@ -206,7 +210,7 @@ func _use_skill_slot(slot_index: int) -> void:
 func _execute_skill(skill_id: String) -> void:
 	var data: Dictionary = skill_system.get_skill_data(skill_id)
 	# Nama animasi mengikuti suffix skill_id (trim prefix "necromancer_")
-	var anim_name: String = skill_id.trim_prefix("necromancer_")
+	var anim_name: String = skill_id.trim_prefix("necromancer_mark")
 	# Posisi kursor saat skill diaktifkan
 	var cursor_pos: Vector2 = get_global_mouse_position()
 

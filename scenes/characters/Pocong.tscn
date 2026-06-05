@@ -5,8 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bmdh41yvkwmdc" path="res://assets/Nusantara/Enemy/Pocong/Idle.png" id="3_d7kaa"]
 [ext_resource type="Texture2D" uid="uid://wt2fr3dxa6t8" path="res://assets/Nusantara/Enemy/Pocong/Walk.png" id="4_w3cx4"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_cwe88"]
-radius = 12.0415945
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qdwmr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_efw6n"]
 atlas = ExtResource("2_qdwmr")
@@ -126,19 +125,20 @@ animations = [{
 script = ExtResource("1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1811798785]
-shape = SubResource("CircleShape2D_cwe88")
+scale = Vector2(1.35, 1.35)
+shape = SubResource("CapsuleShape2D_qdwmr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1273864335]
-position = Vector2(0, -18.000002)
-scale = Vector2(1.005, 1.005)
+position = Vector2(0, -7.895)
+scale = Vector2(0.915, 0.915)
 sprite_frames = SubResource("SpriteFrames_6a2b3")
-animation = &"dead"
+animation = &"idle"
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=73643391]
 custom_minimum_size = Vector2(40, 5)
 offset_left = -19.0
-offset_top = -53.0
+offset_top = -45.465
 offset_right = 21.0
-offset_bottom = -48.0
+offset_bottom = -40.465
 value = 100.0
 show_percentage = false

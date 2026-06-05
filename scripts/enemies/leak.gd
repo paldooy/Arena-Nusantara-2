@@ -6,11 +6,11 @@ extends "res://scripts/enemies/enemy_base.gd"
 # Fase 2 saat HP < 50%: kecepatan naik 30%
 # ============================================================
 
-const AOE_INTERVAL: float = 8.0
+const AOE_INTERVAL: float = 5.0
 const AOE_RADIUS:   float = 120.0
 const AOE_DMG_MULT: float = 1.5
 const PROJECTILE_SPEED: float = 220.0
-const PROJECTILE_HIT_RADIUS: float = 70.0
+const PROJECTILE_HIT_RADIUS: float = 100.0
 
 var aoe_timer:         float = AOE_INTERVAL
 var phase2_triggered:  bool  = false
@@ -26,6 +26,8 @@ func _ready() -> void:
 	collision_layer = LAYER_PLAYER | LAYER_ENEMY | LAYER_BOSS
 	collision_mask  = LAYER_PLAYER | LAYER_ENEMY | LAYER_BOSS
 	is_ranged = true
+	if attack_fx_sprite:
+		attack_fx_sprite.visible = false
 
 func _physics_process(delta: float) -> void:
 	# FIX: wajib cek is_dying
@@ -37,20 +39,45 @@ func _physics_process(delta: float) -> void:
 func _do_attack() -> void:
 	if is_dying or _in_attack_anim: return
 	_in_attack_anim = true
+	
 	var attack_left: bool = false
 	if target and is_instance_valid(target):
 		attack_left = target.global_position.x < global_position.x
-	if anim_sprite:
-		anim_sprite.play("idle")
-		anim_sprite.flip_h = attack_left
-	if attack_fx_sprite:
-		attack_fx_sprite.flip_h = attack_left
-		attack_fx_sprite.play("attack")
-	if target and is_instance_valid(target):
+		
+	var dist: float = global_position.distance_to(target.global_position) if target else 999.0
+	
+	if dist <= 50.0:
+		# ── MELEE ATTACK (Fast & Deadly) ──
+		if anim_sprite:
+			anim_sprite.play("idle") # Or "attack" if the base sprite has one
+			anim_sprite.flip_h = attack_left
+		
+		# Deal immediate high-damage melee swipe
+		if target and is_instance_valid(target) and target.has_method("take_damage"):
+			target.take_damage(int(damage * 1.5))
+			
+		# Very short recovery delay
+		await get_tree().create_timer(0.4).timeout
+		attack_cooldown = 0.6 # <-- Small interval room for melee spam
+	else:
+		# ── RANGED ATTACK (Fireball Projectile) ──
+		if anim_sprite:
+			anim_sprite.play("idle")
+			anim_sprite.flip_h = attack_left
+		if attack_fx_sprite:
+			attack_fx_sprite.visible = true # <-- Make it visible ONLY when starting attack
+			attack_fx_sprite.flip_h = attack_left
+			attack_fx_sprite.play("attack")
+			
 		_fire_projectile(target.global_position, target, is_ally, attack_left)
-	if attack_fx_sprite:
-		await attack_fx_sprite.animation_finished
+		
+		if attack_fx_sprite:
+			await get_tree().create_timer(0.6).timeout
+			attack_fx_sprite.visible = false # <-- Hide it immediately when attack is finished
+		attack_cooldown = ATTACK_INTERVAL
+		
 	_in_attack_anim = false
+
 
 func _fire_projectile(target_world_pos: Vector2, target_ref: Node, owner_is_ally: bool, flip_left: bool) -> void:
 	var proj := _LeakProjectile.new()
@@ -73,15 +100,20 @@ class _LeakProjectile extends Node2D:
 	var sprite_frames: SpriteFrames = null
 	var flip_h: bool = false
 
+	var _sprite: AnimatedSprite2D = null
+
 	func _ready() -> void:
 		if sprite_frames:
-			var fx := AnimatedSprite2D.new()
-			fx.sprite_frames = sprite_frames
-			fx.animation = "attack"
-			fx.z_index = 2
-			fx.flip_h = flip_h
-			add_child(fx)
-			fx.play("attack")
+			_sprite = AnimatedSprite2D.new()
+			_sprite.sprite_frames = sprite_frames
+			_sprite.animation = "attack"
+			_sprite.z_index = 2
+			_sprite.flip_h = flip_h
+			add_child(_sprite)
+			_sprite.scale = Vector2(0.5, 0.5)
+			_sprite.play("attack")
+			var dir := (target_pos - global_position).normalized()
+			_sprite.rotation = dir.angle()
 		else:
 			var core := ColorRect.new()
 			core.size = Vector2(14, 14)
@@ -103,7 +135,10 @@ class _LeakProjectile extends Node2D:
 			_apply_hit()
 			queue_free()
 			return
-		global_position += dir.normalized() * travel_speed * delta
+		var move_dir := dir.normalized()
+		global_position += move_dir * travel_speed * delta
+		if _sprite:
+			_sprite.rotation = move_dir.angle()
 
 	func _apply_hit() -> void:
 		if target_ref and is_instance_valid(target_ref):
