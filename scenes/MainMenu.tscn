@@ -1,6 +1,94 @@
 [gd_scene format=3 uid="uid://c1l6mval60vpm"]
 
 [ext_resource type="Script" uid="uid://c14hyafkjrxi1" path="res://scripts/ui/main_menu.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bb2jmrb5k0qt2" path="res://assets/Nusantara/Player/Ksatria/ATTACK.PNG" id="2_2wh52"]
+[ext_resource type="Texture2D" uid="uid://kr6nw2hkw538" path="res://assets/Nusantara/Player/Dukun/ATTACK 2.png" id="3_ow34m"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l72w3"]
+atlas = ExtResource("2_2wh52")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_826wr"]
+atlas = ExtResource("2_2wh52")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ucygd"]
+atlas = ExtResource("2_2wh52")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mipys"]
+atlas = ExtResource("2_2wh52")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8a8k8"]
+atlas = ExtResource("2_2wh52")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7la6k"]
+animations = [{
+"frames": [{
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_l72w3")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_826wr")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_ucygd")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_mipys")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_8a8k8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2nypq"]
+atlas = ExtResource("3_ow34m")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bky6r"]
+atlas = ExtResource("3_ow34m")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4mxc"]
+atlas = ExtResource("3_ow34m")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5faoh"]
+atlas = ExtResource("3_ow34m")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ptake"]
+atlas = ExtResource("3_ow34m")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hubol"]
+animations = [{
+"frames": [{
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_2nypq")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_bky6r")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_l4mxc")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_5faoh")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_ptake")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="SystemFont" id="SystemFont_yqorp"]
 
@@ -9,6 +97,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1")
 
 [node name="BgFill" type="ColorRect" parent="." unique_id=1524795129]

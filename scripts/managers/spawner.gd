@@ -27,9 +27,9 @@ var is_boss_spawned:      bool    = false
 var active_enemies:       Array   = []
 
 const ENEMY_MAX: Dictionary = {
-	0: 15, # Pocong
-	1: 10, # Banaspati
-	2: 10, # Genderuwo
+	0: 20, # Pocong
+	1: 12, # Banaspati
+	2: 12, # Genderuwo
 }
 
 var enemy_counts: Dictionary = {

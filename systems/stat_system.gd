@@ -21,7 +21,7 @@ enum CharacterClass { BERSERKER, NECROMANCER }
 
 # ─── BASE STAT LEVEL 1 ─────────────────────────────────────
 const BERSERKER_BASE: Dictionary = {
-	"hp":           7000,     # sangat rendah — naik lewat upgrade
+	"hp":           700,     # sangat rendah — naik lewat upgrade
 	"damage":        500,     # rendah — naik lewat upgrade attack%
 	"attack_speed":  1.3,
 	"crit_chance":   0.1,  # 2% base
@@ -34,8 +34,8 @@ const BERSERKER_BASE: Dictionary = {
 }
 
 const NECROMANCER_BASE: Dictionary = {
-	"hp":                7000,    # sangat rendah
-	"damage":             10,    # sangat rendah
+	"hp":                700,    # sangat rendah
+	"damage":             500,    # sangat rendah
 	"attack_speed":       1.1,
 	"crit_chance":        0.02,
 	"crit_mult":          1.3,

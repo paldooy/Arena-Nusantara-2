@@ -21,6 +21,8 @@ var attack_timer: float = 0.0
 var owner_player: Node = null
 var buff_fx: AnimatedSprite2D = null
 var mark_fx: AnimatedSprite2D = null
+var is_attacking: bool = false
+var is_dead: bool = false
 
 const NECRO_SCENE: PackedScene = preload("res://scenes/characters/Necromancer.tscn")
 static var _necro_frames: SpriteFrames = null
@@ -29,6 +31,7 @@ static var _necro_frames: SpriteFrames = null
 
 func _ready() -> void:
 	add_to_group("summons")
+	anim_sprite.animation_finished.connect(_on_anim_finished)
 
 func setup(dmg: int, hp: int, dmg_pct: float, hp_pct: float) -> void:
 	base_damage      = dmg
@@ -82,7 +85,9 @@ func set_marked(active: bool) -> void:
 			mark_fx = null
 
 func _physics_process(delta: float) -> void:
+	if is_dead: return
 	_find_target()
+	
 	if target_enemy == null or not is_instance_valid(target_enemy):
 		# Ikuti player jika tidak ada target
 		_follow_owner(delta)
@@ -94,10 +99,19 @@ func _physics_process(delta: float) -> void:
 		var dir: Vector2 = (target_enemy.global_position - global_position).normalized()
 		velocity = dir * move_speed
 		move_and_slide()
-		anim_sprite.play("walk")
+		
+		_update_facing(dir.x)
+		if not is_attacking:
+			anim_sprite.play("walk")
 	else:
 		velocity = Vector2.ZERO
-		anim_sprite.play("idle")
+		
+		# Face enemy when in range
+		_update_facing(target_enemy.global_position.x - global_position.x)
+		
+		if not is_attacking:
+			anim_sprite.play("idle")
+			
 		attack_timer -= delta
 		if attack_timer <= 0.0:
 			_attack()
@@ -119,24 +133,54 @@ func _find_target() -> void:
 func _attack() -> void:
 	if target_enemy == null or not is_instance_valid(target_enemy):
 		return
+		
+	is_attacking = true
 	var final_dmg: int = max(1, int(base_damage * summon_damage_pct))
+	
 	if target_enemy.has_method("take_damage"):
 		target_enemy.take_damage(final_dmg)
 	anim_sprite.play("attack")
 
 func _follow_owner(_delta: float) -> void:
-	if owner_player == null:
+	if owner_player == null or not is_instance_valid(owner_player):
+		if not is_attacking:
+			anim_sprite.play("idle")
 		return
+		
 	var dist: float = global_position.distance_to(owner_player.global_position)
 	if dist > 80.0:
 		var dir: Vector2 = (owner_player.global_position - global_position).normalized()
 		velocity = dir * move_speed
 		move_and_slide()
+		
+		_update_facing(dir.x)
+		if not is_attacking:
+			anim_sprite.play("walk")
+	else:
+		velocity = Vector2.ZERO
+		if not is_attacking:
+			anim_sprite.play("idle")
+
+func _update_facing(dir_x: float) -> void:
+	if dir_x > 0.05:
+		anim_sprite.flip_h = false
+	elif dir_x < -0.05:
+		anim_sprite.flip_h = true
+
+func _on_anim_finished() -> void:
+	if anim_sprite.animation == "attack":
+		is_attacking = false
+	elif anim_sprite.animation == "dead":
+		queue_free()
 
 func take_damage(amount: int) -> void:
+	if is_dead: return
 	current_hp -= amount
 	if current_hp <= 0:
-		queue_free()
+		is_dead = true
+		anim_sprite.play("dead")
+		if has_node("CollisionShape2D"):
+			$CollisionShape2D.set_deferred("disabled", true)
 
 func _get_necro_frames() -> SpriteFrames:
 	if _necro_frames != null:
