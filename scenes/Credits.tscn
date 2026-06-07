@@ -1,157 +1,183 @@
 [gd_scene format=3 uid="uid://credits"]
 
-[ext_resource type="Script" path="res://scripts/credits.gd" id="1"]
+[ext_resource type="Script" uid="uid://bu5evionqlrgj" path="res://scripts/ui/credits.gd" id="1"]
 
-[node name="Credits" type="Control"]
+[node name="Credits" type="Control" unique_id=1940466298]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1")
 
-[node name="BgFill" type="ColorRect" parent="."]
+[node name="BgFill" type="ColorRect" parent="." unique_id=952579769]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.055, 0.035, 0.09, 1.0)
+color = Color(0.055, 0.035, 0.09, 1)
 
-[node name="LineTop" type="ColorRect" parent="."]
+[node name="LineTop" type="ColorRect" parent="." unique_id=2086750616]
+layout_mode = 0
 anchor_right = 1.0
 offset_bottom = 3.0
-color = Color(0.78, 0.58, 0.08, 1.0)
+color = Color(0.78, 0.58, 0.08, 1)
 
-[node name="LineBottom" type="ColorRect" parent="."]
+[node name="LineBottom" type="ColorRect" parent="." unique_id=826081666]
+layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -3.0
-color = Color(0.78, 0.58, 0.08, 1.0)
+color = Color(0.78, 0.58, 0.08, 1)
 
-[node name="LblTitle" type="Label" parent="."]
+[node name="LblTitle" type="Label" parent="." unique_id=946176612]
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -200.0
 offset_top = 30.0
 offset_right = 200.0
 offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.95, 0.82, 0.2, 1)
+theme_override_font_sizes/font_size = 32
 text = "✦  KREDIT  ✦"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 32
-theme_override_colors/font_color = Color(0.95, 0.82, 0.20, 1.0)
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=338175399]
+layout_mode = 1
+anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
-anchor_top = 0.0
 anchor_bottom = 1.0
 offset_left = -320.0
 offset_top = 90.0
 offset_right = 320.0
 offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VBox" type="VBoxContainer" parent="ScrollContainer" unique_id=764643638]
 custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="LblGame" type="Label" parent="ScrollContainer/VBox"]
-text = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-theme_override_font_sizes/font_size = 11
+[node name="LblGame" type="Label" parent="ScrollContainer/VBox" unique_id=670985032]
+layout_mode = 2
 theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 0.5)
+theme_override_font_sizes/font_size = 11
+text = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 horizontal_alignment = 1
 
-[node name="LblGameTitle" type="Label" parent="ScrollContainer/VBox"]
+[node name="LblGameTitle" type="Label" parent="ScrollContainer/VBox" unique_id=104035560]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.2, 1)
+theme_override_font_sizes/font_size = 24
 text = "ARENA NUSANTARA"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 24
-theme_override_colors/font_color = Color(0.95, 0.82, 0.20, 1.0)
 
-[node name="LblGameSub" type="Label" parent="ScrollContainer/VBox"]
-text = "Game Tugas Kuliah 2025"
-horizontal_alignment = 1
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.70, 0.60, 0.85, 0.8)
-
-[node name="Space1" type="Control" parent="ScrollContainer/VBox"]
+[node name="Space1" type="Control" parent="ScrollContainer/VBox" unique_id=1201743605]
 custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
-[node name="LblDevTitle" type="Label" parent="ScrollContainer/VBox"]
+[node name="LblDevTitle" type="Label" parent="ScrollContainer/VBox" unique_id=1230789304]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 1)
+theme_override_font_sizes/font_size = 16
 text = "◆  DEVELOPER"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 1.0)
 
-[node name="LblDev" type="Label" parent="ScrollContainer/VBox"]
-text = "Mahasiswa — Teknik Informatika"
-horizontal_alignment = 1
+[node name="LblDev" type="Label" parent="ScrollContainer/VBox" unique_id=873428817]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.8, 0.92, 0.9)
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.85, 0.80, 0.92, 0.9)
+text = "jaki n padil"
+horizontal_alignment = 1
 
-[node name="Space2" type="Control" parent="ScrollContainer/VBox"]
+[node name="Space2" type="Control" parent="ScrollContainer/VBox" unique_id=1956060854]
 custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
-[node name="LblEngineTitle" type="Label" parent="ScrollContainer/VBox"]
+[node name="LblEngineTitle" type="Label" parent="ScrollContainer/VBox" unique_id=2052268158]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 1)
+theme_override_font_sizes/font_size = 16
 text = "◆  DIBUAT DENGAN"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 1.0)
 
-[node name="LblEngine" type="Label" parent="ScrollContainer/VBox"]
-text = "Godot Engine 4.x"
-horizontal_alignment = 1
+[node name="LblEngine" type="Label" parent="ScrollContainer/VBox" unique_id=2056675959]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.8, 0.92, 0.9)
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.85, 0.80, 0.92, 0.9)
+text = "Godot Engine 4.6.2"
+horizontal_alignment = 1
 
-[node name="Space3" type="Control" parent="ScrollContainer/VBox"]
+[node name="Space3" type="Control" parent="ScrollContainer/VBox" unique_id=1638554548]
 custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
-[node name="LblInspiTitle" type="Label" parent="ScrollContainer/VBox"]
+[node name="LblInspiTitle" type="Label" parent="ScrollContainer/VBox" unique_id=1424979287]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 1)
+theme_override_font_sizes/font_size = 16
 text = "◆  TERINSPIRASI DARI"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 1.0)
 
-[node name="LblInspi" type="Label" parent="ScrollContainer/VBox"]
-text = "Vampire Survivors\nMitologi & Folklore Nusantara"
-horizontal_alignment = 1
+[node name="LblInspi" type="Label" parent="ScrollContainer/VBox" unique_id=67658250]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.8, 0.92, 0.9)
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.85, 0.80, 0.92, 0.9)
+text = "Vampire Survivors
+Mitologi & Folklore Nusantara"
+horizontal_alignment = 1
 
-[node name="Space4" type="Control" parent="ScrollContainer/VBox"]
+[node name="Space4" type="Control" parent="ScrollContainer/VBox" unique_id=1482828995]
 custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
-[node name="LblMythTitle" type="Label" parent="ScrollContainer/VBox"]
+[node name="LblMythTitle" type="Label" parent="ScrollContainer/VBox" unique_id=1674304155]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 1)
+theme_override_font_sizes/font_size = 16
 text = "◆  HANTU DALAM GAME"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 1.0)
 
-[node name="LblMyth" type="Label" parent="ScrollContainer/VBox"]
-text = "👻  Pocong    — Hantu berkafan, melee agresif\n🔥  Banaspati — Bola api gentayangan, serangan jarak jauh\n🌳  Genderuwo  — Raksasa hutan, serangan mematikan\n🔴  Leak      — Boss akhir, setan bali penguasa api"
-horizontal_alignment = 1
+[node name="LblMyth" type="Label" parent="ScrollContainer/VBox" unique_id=467234481]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.74, 0.9, 0.85)
 theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.80, 0.74, 0.90, 0.85)
+text = "👻  Pocong    — Hantu berkafan, melee agresif
+🔥  Banaspati — Bola api gentayangan, serangan jarak jauh
+🌳  Genderuwo  — Raksasa hutan, serangan mematikan
+🔴  Leak      — Boss akhir, setan bali penguasa api"
+horizontal_alignment = 1
 
-[node name="Space5" type="Control" parent="ScrollContainer/VBox"]
+[node name="Space5" type="Control" parent="ScrollContainer/VBox" unique_id=1963558292]
 custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
-[node name="LblThanks" type="Label" parent="ScrollContainer/VBox"]
+[node name="LblThanks" type="Label" parent="ScrollContainer/VBox" unique_id=280125165]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.6, 0.88, 0.75)
+theme_override_font_sizes/font_size = 13
 text = "✦  Terima kasih sudah memainkan Arena Nusantara!  ✦"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.72, 0.60, 0.88, 0.75)
 
-[node name="LblDiv2" type="Label" parent="ScrollContainer/VBox"]
-text = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-theme_override_font_sizes/font_size = 11
+[node name="LblDiv2" type="Label" parent="ScrollContainer/VBox" unique_id=1563588700]
+layout_mode = 2
 theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 0.5)
+theme_override_font_sizes/font_size = 11
+text = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 horizontal_alignment = 1
 
-[node name="BtnBack" type="Button" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
+[node name="BtnBack" type="Button" parent="." unique_id=1027811016]
+layout_mode = 0
 anchor_left = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
+anchor_bottom = 1.0
 offset_left = -80.0
 offset_top = -52.0
 offset_right = 80.0
 offset_bottom = -14.0
-text = "◀  Kembali"
+theme_override_colors/font_color = Color(0.78, 0.65, 0.95, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.78, 0.65, 0.95, 1.0)
+text = "◀  Kembali"

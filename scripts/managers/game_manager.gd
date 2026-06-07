@@ -16,6 +16,7 @@ signal on_game_over(is_win: bool)
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
+
 func go_to_main_menu() -> void:
 	game_state = GameState.MENU
 	get_tree().paused = false
