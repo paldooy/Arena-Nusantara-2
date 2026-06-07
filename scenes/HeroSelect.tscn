@@ -1,12 +1,102 @@
 [gd_scene format=3 uid="uid://bq8tcf6pgpmri"]
 
 [ext_resource type="Script" uid="uid://chuibvfa3rgac" path="res://scripts/ui/hero_select.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bb2jmrb5k0qt2" path="res://assets/Nusantara/Player/Ksatria/ATTACK.PNG" id="2_a2chx"]
+[ext_resource type="Texture2D" uid="uid://kr6nw2hkw538" path="res://assets/Nusantara/Player/Dukun/ATTACK 2.png" id="3_ievui"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4abt"]
+atlas = ExtResource("2_a2chx")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f6d24"]
+atlas = ExtResource("2_a2chx")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qyysj"]
+atlas = ExtResource("2_a2chx")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6u05w"]
+atlas = ExtResource("2_a2chx")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgsfl"]
+atlas = ExtResource("2_a2chx")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t4pji"]
+animations = [{
+"frames": [{
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_h4abt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f6d24")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qyysj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6u05w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cgsfl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yqytp"]
+atlas = ExtResource("3_ievui")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2d2gg"]
+atlas = ExtResource("3_ievui")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xmw3s"]
+atlas = ExtResource("3_ievui")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j6oqw"]
+atlas = ExtResource("3_ievui")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmsyl"]
+atlas = ExtResource("3_ievui")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p4buv"]
+animations = [{
+"frames": [{
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_yqytp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2d2gg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xmw3s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j6oqw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmsyl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="HeroSelect" type="Control" unique_id=440507476]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1")
 
 [node name="BgFill" type="ColorRect" parent="." unique_id=1265551765]
@@ -20,6 +110,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.08, 0.02, 0.14, 0.4)
 
 [node name="LineTop" type="ColorRect" parent="." unique_id=650632644]
@@ -176,6 +268,12 @@ theme_override_colors/font_hover_color = Color(0.9490196, 0.7019608, 0.2, 1)
 theme_override_font_sizes/font_size = 15
 text = "Pilih Berserker"
 
+[node name="Ksatria" type="AnimatedSprite2D" parent="Cards/CardB" unique_id=669715217]
+position = Vector2(164, 217)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_t4pji")
+autoplay = "default"
+
 [node name="CardN" type="PanelContainer" parent="Cards" unique_id=1451097375]
 custom_minimum_size = Vector2(300, 315)
 layout_mode = 2
@@ -271,6 +369,12 @@ theme_override_colors/font_color = Color(0.88, 0.8, 1, 1)
 theme_override_colors/font_hover_color = Color(0.9490196, 0.7019608, 0.2, 1)
 theme_override_font_sizes/font_size = 15
 text = "Pilih Necromancer"
+
+[node name="Dukun" type="AnimatedSprite2D" parent="Cards/CardN" unique_id=1210078192]
+position = Vector2(170, 217)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_p4buv")
+autoplay = "default"
 
 [node name="Preview" type="PanelContainer" parent="." unique_id=652332717]
 layout_mode = 1
