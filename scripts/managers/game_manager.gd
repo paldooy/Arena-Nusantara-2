@@ -40,8 +40,6 @@ func end_game(win: bool) -> void:
 	game_state = GameState.WIN if win else GameState.LOSE
 	get_tree().paused = true
 	emit_signal("on_game_over", win)
-	await get_tree().create_timer(2.0).timeout
-	go_to_main_menu()
 
 func is_playing() -> bool:
 	return game_state == GameState.PLAYING

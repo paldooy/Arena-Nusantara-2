@@ -30,6 +30,7 @@ const BASE_SUMMON_HP:     int = 60
 @onready var hud:               CanvasLayer = $HUD
 @onready var stat_upgrade_ui:   CanvasLayer = $StatUpgradeUI
 @onready var skill_choice_ui:   CanvasLayer = $SkillChoiceUI
+@onready var game_over_ui:       CanvasLayer = $GameOverUI
 
 @onready var level_system:        Node = $Systems/LevelSystem
 @onready var stat_system:         Node = $Systems/StatSystem
@@ -83,6 +84,9 @@ func _ready() -> void:
 	# Sinyal dari player
 	player_node.request_passive_summon.connect(_on_passive_summon_request)
 	request_convert_from_death.connect(_on_convert_from_death)
+	
+	# Game Over / Win
+	GameManager.on_game_over.connect(_on_game_over)
 
 	# ── Step 4: Init class SETELAH semua sinyal terpasang ───
 	class_system.init_class(GameManager.selected_class)
@@ -197,3 +201,7 @@ func _get_enemy_scene(enemy_type: int) -> PackedScene:
 			return SCENE_GENDERUWO
 		_:
 			return null
+
+func _on_game_over(win: bool) -> void:
+	if game_over_ui:
+		game_over_ui.show_game_over(win)

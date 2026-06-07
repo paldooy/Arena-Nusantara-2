@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://hud" path="res://scenes/HUD.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://scenes/StatUpgradeUI.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://scenes/SkillChoiceUI.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/GameOverUI.tscn" id="15"]
 [ext_resource type="Texture2D" uid="uid://tp0xmx8d5caf" path="res://assets/TinySword/Terrain/Ground/Tilemap_Flat.png" id="13_pcadl"]
 [ext_resource type="Texture2D" uid="uid://bpd4tclonrbxq" path="res://assets/TinySword/Terrain/Ground/Tilemap_Elevation.png" id="14_rpagb"]
 
@@ -426,6 +427,8 @@ script = ExtResource("8")
 [node name="StatUpgradeUI" parent="." unique_id=1614082592 instance=ExtResource("11")]
 
 [node name="SkillChoiceUI" parent="." unique_id=1517438974 instance=ExtResource("12")]
+
+[node name="GameOverUI" parent="." unique_id=2211993344 instance=ExtResource("15")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1427751502]
 zoom = Vector2(1.2, 1.2)
