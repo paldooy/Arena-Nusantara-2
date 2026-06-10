@@ -9,7 +9,7 @@ extends CharacterBody2D
 
 signal request_passive_summon()
 
-const ATTACK_RANGE:    float = 50.0
+const ATTACK_RANGE:    float = 90.0
 const BASE_INTERVAL:   float = 0.65
 
 var class_system:     Node  = null

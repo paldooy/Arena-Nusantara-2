@@ -115,7 +115,7 @@ func _do_basic_attack(mouse_pos: Vector2) -> void:
 
 	# Cari musuh yang diklik
 	var target: Node  = null
-	var min_d:  float = 36.0
+	var min_d:  float = 80.0
 	for enemy in enemies_in_scene:
 		if not is_instance_valid(enemy): continue
 		var d: float = mouse_pos.distance_to(enemy.global_position)
