@@ -91,7 +91,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.8, 0.92, 0.9)
 theme_override_font_sizes/font_size = 14
-text = "jaki n padil"
+text = "Kelompok 3_Mata Kuliah Pemrograman Permainan Digital ITK_2026"
 horizontal_alignment = 1
 
 [node name="Space2" type="Control" parent="ScrollContainer/VBox" unique_id=1956060854]
@@ -120,15 +120,15 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.78, 0.58, 0.08, 1)
 theme_override_font_sizes/font_size = 16
-text = "◆  TERINSPIRASI DARI"
+text = "◆  ASSET YANG DIGUNAKAN"
 horizontal_alignment = 1
 
 [node name="LblInspi" type="Label" parent="ScrollContainer/VBox" unique_id=67658250]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.8, 0.92, 0.9)
 theme_override_font_sizes/font_size = 14
-text = "Vampire Survivors
-Mitologi & Folklore Nusantara"
+text = "Tiny Swords - Itch.io
+Mystic Woods - Itch.io"
 horizontal_alignment = 1
 
 [node name="Space4" type="Control" parent="ScrollContainer/VBox" unique_id=1482828995]
